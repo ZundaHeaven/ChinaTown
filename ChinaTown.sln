@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CA171821-71F8-416D-9E2E-5628EBE3AA31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{7993D5C6-9292-4644-81BF-3362F19350D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{58F45C04-86D2-44B5-BDCA-1A4AE8D81B75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaTown.Web", "src\Presentation\ChinaTown.Web\ChinaTown.Web.csproj", "{A33EF94A-A536-4074-9473-1422573F3DD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaTown.Domain", "src\Core\ChinaTown.Domain\ChinaTown.Domain.csproj", "{FDF3565C-A445-4F17-9E06-3D61057A13CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaTown.Application", "src\Core\ChinaTown.Application\ChinaTown.Application.csproj", "{9C8FA6B0-8B23-48E2-B011-5E7CD2991D73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure\Infrastructure.csproj", "{ECB8F029-2CF5-4E96-B7C7-A65F7BA53456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistance", "src\Infrastructure\Persistance\Persistance.csproj", "{2669F543-2880-4006-9397-EE9A03307391}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A33EF94A-A536-4074-9473-1422573F3DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A33EF94A-A536-4074-9473-1422573F3DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A33EF94A-A536-4074-9473-1422573F3DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A33EF94A-A536-4074-9473-1422573F3DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDF3565C-A445-4F17-9E06-3D61057A13CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDF3565C-A445-4F17-9E06-3D61057A13CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDF3565C-A445-4F17-9E06-3D61057A13CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDF3565C-A445-4F17-9E06-3D61057A13CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8FA6B0-8B23-48E2-B011-5E7CD2991D73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8FA6B0-8B23-48E2-B011-5E7CD2991D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8FA6B0-8B23-48E2-B011-5E7CD2991D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8FA6B0-8B23-48E2-B011-5E7CD2991D73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECB8F029-2CF5-4E96-B7C7-A65F7BA53456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECB8F029-2CF5-4E96-B7C7-A65F7BA53456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECB8F029-2CF5-4E96-B7C7-A65F7BA53456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECB8F029-2CF5-4E96-B7C7-A65F7BA53456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2669F543-2880-4006-9397-EE9A03307391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2669F543-2880-4006-9397-EE9A03307391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2669F543-2880-4006-9397-EE9A03307391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2669F543-2880-4006-9397-EE9A03307391}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A33EF94A-A536-4074-9473-1422573F3DD1} = {7993D5C6-9292-4644-81BF-3362F19350D4}
+		{FDF3565C-A445-4F17-9E06-3D61057A13CC} = {CA171821-71F8-416D-9E2E-5628EBE3AA31}
+		{9C8FA6B0-8B23-48E2-B011-5E7CD2991D73} = {CA171821-71F8-416D-9E2E-5628EBE3AA31}
+		{ECB8F029-2CF5-4E96-B7C7-A65F7BA53456} = {58F45C04-86D2-44B5-BDCA-1A4AE8D81B75}
+		{2669F543-2880-4006-9397-EE9A03307391} = {58F45C04-86D2-44B5-BDCA-1A4AE8D81B75}
+	EndGlobalSection
+EndGlobal
