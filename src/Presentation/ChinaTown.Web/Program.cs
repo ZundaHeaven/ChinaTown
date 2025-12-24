@@ -1,26 +1,32 @@
+using ChinaTown.Web.Extensions;
+using ChinaTown.Web.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer(); // Enables API explorer for SwaggerGen
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddSwaggerWithJwt();
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.UseSwagger(); // Enables middleware to serve generated Swagger as JSON endpoint
-    app.UseSwaggerUI(); // Enables middleware to serve Swagger UI
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.MapControllers();
 
 app.Run();

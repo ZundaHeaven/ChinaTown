@@ -2,7 +2,7 @@ using ChinaTown.Domain.Enums;
 
 namespace ChinaTown.Domain.Entities;
 
-public class Content : BaseEntity
+public abstract class Content : BaseEntity
 {
     public required string Title { get; set; }
     public required string Slug { get; set; }

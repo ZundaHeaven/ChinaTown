@@ -5,6 +5,6 @@ public class RecipeTypeClaim
     public Guid RecipeId { get; set; }
     public Recipe Recipe { get; set; } = null!;
 
-    public required Guid RecipeTypeId { get; set; }
+    public Guid RecipeTypeId { get; set; }
     public RecipeType RecipeType { get; set; } = null!;
 }
