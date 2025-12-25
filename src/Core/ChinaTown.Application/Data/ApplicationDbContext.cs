@@ -11,9 +11,6 @@ public class ApplicationDbContext : DbContext
         : base(options)
     {
     }
-
-    // Удаляем DbSet<Content>, так как Content теперь абстрактный класс
-    // public DbSet<Content> Contents { get; set; }
     
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -170,7 +167,7 @@ public class ApplicationDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(200);
                 
-            entity.Property(b => b.CoverPath)
+            entity.Property(b => b.CoverFileId)
                 .IsRequired()
                 .HasMaxLength(500);
                 

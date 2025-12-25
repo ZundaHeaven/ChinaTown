@@ -29,6 +29,8 @@ public static class ServiceExtensions
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<IArticleTypeService, ArticleTypeService>();
+        services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IGenreService, GenreService>();
         
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.Configure<MongoDbConfig>(configuration.GetSection("MongoDb"));

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChinaTown.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/articles")]
 public class ArticlesController : ControllerBase
 {
     private readonly IArticleService _articleService;

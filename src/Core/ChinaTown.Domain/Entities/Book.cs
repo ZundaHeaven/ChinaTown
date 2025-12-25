@@ -13,7 +13,7 @@ public class Book : Content
     public required string Description { get; set; }
     public required Guid BookFileId { get; set; }
     public required int FileSizeBytes { get; set; }
-    public required string CoverPath { get; set; }
+    public required Guid CoverFileId { get; set; }
     public required int PageAmount { get; set; }
     public required int YearOfPublish { get; set; }
     

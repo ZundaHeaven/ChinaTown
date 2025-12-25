@@ -1,4 +1,3 @@
-// ChinaTown.Web/Controllers/ArticleTypesController.cs
 using ChinaTown.Application.Dto.Article;
 using ChinaTown.Application.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChinaTown.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/article-types")]
 [Authorize(Roles = "Admin")]
 public class ArticleTypesController : ControllerBase
 {
