@@ -87,34 +87,34 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("{id}/comments")]
-    public async Task<IActionResult> GetComments(Guid id, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetComments(Guid id)
     {
-        var result = await _bookService.GetCommentsAsync(id, page, pageSize);
+        var result = await _bookService.GetCommentsAsync(id);
         return Ok(result);
     }
 
     [HttpGet("{id}/likes")]
-    public async Task<IActionResult> GetLikes(Guid id, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetLikes(Guid id)
     {
-        var result = await _bookService.GetLikesAsync(id, page, pageSize);
+        var result = await _bookService.GetLikesAsync(id);
         return Ok(result);
     }
 
     [Authorize]
     [HttpGet("my")]
-    public async Task<IActionResult> GetMyBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetMyBooks()
     {
         var userId = GetCurrentUserId();
-        var result = await _bookService.GetMyBooksAsync(userId, page, pageSize);
+        var result = await _bookService.GetMyBooksAsync(userId);
         return Ok(result);
     }
 
     [Authorize]
     [HttpGet("archive")]
-    public async Task<IActionResult> GetArchivedBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetArchivedBooks()
     {
         var userId = GetCurrentUserId();
-        var result = await _bookService.GetArchivedBooksAsync(userId, page, pageSize);
+        var result = await _bookService.GetArchivedBooksAsync(userId);
         return Ok(result);
     }
 

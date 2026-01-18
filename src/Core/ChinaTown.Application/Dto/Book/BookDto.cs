@@ -18,12 +18,11 @@ public class BookDto
     public List<GenreDto> Genres { get; set; } = new();
     public Guid CoverFileId { get; set; }
     public Guid BookFileId { get; set; }
-    public ContentStatus Status { get; set; }
+    public string ContentStatus { get; set; }
     public Guid UserId { get; set; }
     public string Username { get; set; } = string.Empty;
     public int LikesCount { get; set; }
     public int CommentsCount { get; set; }
-    public int ViewsCount { get; set; }
 }
 
 public class GenreDto

@@ -7,6 +7,4 @@ public class ArticleFilterDto
     public Guid? Author { get; set; }
     public string? Sort { get; set; } = "newest";
     public string? Status { get; set; }
-    public int Page { get; set; } = 1;
-    public int PageSize { get; set; } = 20;
 }

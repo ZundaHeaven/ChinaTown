@@ -63,7 +63,6 @@ public class ArticleTypeService : IArticleTypeService
 
         if (!string.IsNullOrWhiteSpace(dto.Name) && dto.Name != type.Name)
         {
-            // Проверяем уникальность нового имени
             var existingType = await _context.ArticleTypes
                 .FirstOrDefaultAsync(at => at.Name == dto.Name);
             

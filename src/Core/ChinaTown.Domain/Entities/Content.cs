@@ -17,5 +17,4 @@ public abstract class Content : BaseEntity
     
     public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-    public virtual ICollection<View> Views { get; set; } = new List<View>();
 }

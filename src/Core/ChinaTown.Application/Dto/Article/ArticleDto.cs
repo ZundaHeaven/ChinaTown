@@ -15,7 +15,6 @@ public class ArticleDto
     public string AuthorName { get; set; } = string.Empty;
     public int LikesCount { get; set; }
     public int CommentsCount { get; set; }
-    public int ViewsCount { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime ModifiedOn { get; set; }
 }

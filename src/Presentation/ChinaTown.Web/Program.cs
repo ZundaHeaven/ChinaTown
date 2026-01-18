@@ -1,3 +1,5 @@
+using AutoMapper;
+using ChinaTown.Application.Mappers;
 using ChinaTown.Web.Extensions;
 using ChinaTown.Web.Middleware;
 

@@ -1,7 +1,9 @@
+using AutoMapper;
 using ChinaTown.Application.Data;
 using Microsoft.EntityFrameworkCore;
 using ChinaTown.Application.Dto.Book;
 using ChinaTown.Application.Dto.Common;
+using ChinaTown.Application.Helpers;
 using ChinaTown.Domain.Entities;
 using ChinaTown.Domain.Enums;
 using ChinaTown.Domain.Exceptions;
@@ -13,14 +15,17 @@ public class BookService : IBookService
 {
     private readonly ApplicationDbContext _context;
     private readonly MongoDbContext _mongoDb;
+    private readonly IMapper _mapper;
+    
 
-    public BookService(ApplicationDbContext context, MongoDbContext mongoDb)
+    public BookService(ApplicationDbContext context, MongoDbContext mongoDb, IMapper mapper)
     {
         _context = context;
         _mongoDb = mongoDb;
+        _mapper = mapper;
     }
 
-    public async Task<PaginatedResult<BookDto>> GetBooksAsync(BookFilterDto filter)
+    public async Task<IEnumerable<BookDto>> GetBooksAsync(BookFilterDto filter)
     {
         var query = _context.Books
             .Include(b => b.BookGenres).ThenInclude(bg => bg.Genre)
@@ -41,13 +46,7 @@ public class BookService : IBookService
 
         if (filter.YearMax.HasValue)
             query = query.Where(b => b.YearOfPublish <= filter.YearMax);
-
-        if (filter.PagesMin.HasValue)
-            query = query.Where(b => b.PageAmount >= filter.PagesMin);
-
-        if (filter.PagesMax.HasValue)
-            query = query.Where(b => b.PageAmount <= filter.PagesMax);
-
+        
         if (filter.Available.HasValue)
             query = query.Where(b => filter.Available.Value ? b.Status == ContentStatus.Published : b.Status != ContentStatus.Published);
 
@@ -59,42 +58,10 @@ public class BookService : IBookService
             _ => query.OrderByDescending(b => b.CreatedOn)
         };
 
-        var totalCount = await query.CountAsync();
         var books = await query
-            .Skip((filter.Page - 1) * filter.PageSize)
-            .Take(filter.PageSize)
-            .Select(b => new BookDto
-            {
-                Id = b.Id,
-                Title = b.Title,
-                Slug = b.Slug,
-                Excerpt = b.Excerpt ?? string.Empty,
-                AuthorName = b.AuthorName,
-                Description = b.Description,
-                PageAmount = b.PageAmount,
-                YearOfPublish = b.YearOfPublish,
-                FileSizeBytes = b.FileSizeBytes,
-                CreatedOn = b.CreatedOn,
-                ModifiedOn = b.ModifiedOn,
-                Genres = b.BookGenres.Select(bg => new GenreDto { Id = bg.Genre.Id, Name = bg.Genre.Name }).ToList(),
-                CoverFileId = b.CoverFileId,
-                BookFileId = b.BookFileId,
-                Status = b.Status,
-                UserId = b.UserId,
-                Username = b.Author.Username,
-                LikesCount = b.Likes.Count,
-                CommentsCount = b.Comments.Count,
-                ViewsCount = b.Views.Count
-            })
             .ToListAsync();
 
-        return new PaginatedResult<BookDto>
-        {
-            Items = books,
-            TotalCount = totalCount,
-            Page = filter.Page,
-            PageSize = filter.PageSize
-        };
+        return _mapper.Map<IEnumerable<BookDto>>(books);
     }
 
     public async Task<BookDto> GetBookAsync(Guid id)
@@ -107,29 +74,7 @@ public class BookService : IBookService
         if (book == null)
             throw new NotFoundException("Book not found");
 
-        return new BookDto
-        {
-            Id = book.Id,
-            Title = book.Title,
-            Slug = book.Slug,
-            Excerpt = book.Excerpt ?? string.Empty,
-            AuthorName = book.AuthorName,
-            Description = book.Description,
-            PageAmount = book.PageAmount,
-            YearOfPublish = book.YearOfPublish,
-            FileSizeBytes = book.FileSizeBytes,
-            CreatedOn = book.CreatedOn,
-            ModifiedOn = book.ModifiedOn,
-            Genres = book.BookGenres.Select(bg => new GenreDto { Id = bg.Genre.Id, Name = bg.Genre.Name }).ToList(),
-            CoverFileId = book.CoverFileId,
-            BookFileId = book.BookFileId,
-            Status = book.Status,
-            UserId = book.UserId,
-            Username = book.Author.Username,
-            LikesCount = book.Likes.Count,
-            CommentsCount = book.Comments.Count,
-            ViewsCount = book.Views.Count
-        };
+        return _mapper.Map<BookDto>(book);
     }
 
     public async Task<BookDto> CreateBookAsync(BookCreateDto dto, Guid userId)
@@ -141,7 +86,7 @@ public class BookService : IBookService
         var book = new Book
         {
             Title = dto.Title,
-            Slug = GenerateSlug(dto.Title),
+            Slug = SlugHelper.GenerateSlug("book", dto.Title),
             AuthorName = dto.AuthorName,
             Description = dto.Description,
             PageAmount = dto.PageAmount,
@@ -165,29 +110,7 @@ public class BookService : IBookService
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
 
-        return new BookDto
-        {
-            Id = book.Id,
-            Title = book.Title,
-            Slug = book.Slug,
-            Excerpt = string.Empty,
-            AuthorName = book.AuthorName,
-            Description = book.Description,
-            PageAmount = book.PageAmount,
-            YearOfPublish = book.YearOfPublish,
-            FileSizeBytes = book.FileSizeBytes,
-            CreatedOn = book.CreatedOn,
-            ModifiedOn = book.ModifiedOn,
-            Genres = book.BookGenres.Select(bg => new GenreDto { Id = bg.Genre.Id, Name = bg.Genre.Name }).ToList(),
-            CoverFileId = book.CoverFileId,
-            BookFileId = book.BookFileId,
-            Status = book.Status,
-            UserId = book.UserId,
-            Username = user.Username,
-            LikesCount = 0,
-            CommentsCount = 0,
-            ViewsCount = 0
-        };
+        return _mapper.Map<BookDto>(book);
     }
 
     public async Task<BookDto> UpdateBookAsync(Guid id, BookUpdateDto dto, Guid userId)
@@ -204,7 +127,7 @@ public class BookService : IBookService
             throw new UnauthorizedException("You can only update your own books");
 
         book.Title = dto.Title;
-        book.Slug = GenerateSlug(dto.Title);
+        book.Slug = SlugHelper.GenerateSlug("book", dto.Title);
         book.AuthorName = dto.AuthorName;
         book.Description = dto.Description;
         book.PageAmount = dto.PageAmount;
@@ -223,29 +146,7 @@ public class BookService : IBookService
 
         await _context.SaveChangesAsync();
 
-        return new BookDto
-        {
-            Id = book.Id,
-            Title = book.Title,
-            Slug = book.Slug,
-            Excerpt = book.Excerpt ?? string.Empty,
-            AuthorName = book.AuthorName,
-            Description = book.Description,
-            PageAmount = book.PageAmount,
-            YearOfPublish = book.YearOfPublish,
-            FileSizeBytes = book.FileSizeBytes,
-            CreatedOn = book.CreatedOn,
-            ModifiedOn = book.ModifiedOn,
-            Genres = book.BookGenres.Select(bg => new GenreDto { Id = bg.Genre.Id, Name = bg.Genre.Name }).ToList(),
-            CoverFileId = book.CoverFileId,
-            BookFileId = book.BookFileId,
-            Status = book.Status,
-            UserId = book.UserId,
-            Username = book.Author.Username,
-            LikesCount = book.Likes.Count,
-            CommentsCount = book.Comments.Count,
-            ViewsCount = book.Views.Count
-        };
+        return _mapper.Map<BookDto>(book);
     }
 
     public async Task DeleteBookAsync(Guid id, Guid userId)
@@ -255,7 +156,7 @@ public class BookService : IBookService
             throw new NotFoundException("Book not found");
 
         var user = await _context.Users.FindAsync(userId);
-        var isAdmin = user?.Role.Name == "Admin";
+        var isAdmin = user?.Role.ToString() == "Admin";
 
         if (book.UserId != userId && !isAdmin)
             throw new UnauthorizedException("You can only delete your own books");
@@ -304,41 +205,20 @@ public class BookService : IBookService
         return await _mongoDb.DownloadFileAsync(book.BookFileId);
     }
 
-    public async Task<PaginatedResult<CommentDto>> GetCommentsAsync(Guid bookId, int page, int pageSize)
+    public async Task<IEnumerable<CommentDto>> GetCommentsAsync(Guid bookId)
     {
         var query = _context.Comments
-            .Include(c => c.User)
-            .Where(c => c.ContentId == bookId && c.ParentId == null);
+            .Include(c => c.User);
 
         var totalCount = await query.CountAsync();
         var comments = await query
             .OrderByDescending(c => c.CreatedOn)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(c => new CommentDto
-            {
-                Id = c.Id,
-                Text = c.Text,
-                UserId = c.UserId,
-                Username = c.User.Username,
-                AvatarId = c.User.AvatarId,
-                ParentId = c.ParentId,
-                ReplyCount = c.Replies.Count,
-                CreatedOn = c.CreatedOn,
-                ModifiedOn = c.ModifiedOn
-            })
             .ToListAsync();
 
-        return new PaginatedResult<CommentDto>
-        {
-            Items = comments,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 
-    public async Task<PaginatedResult<LikeDto>> GetLikesAsync(Guid bookId, int page, int pageSize)
+    public async Task<IEnumerable<LikeDto>> GetLikesAsync(Guid bookId)
     {
         var query = _context.Likes
             .Include(l => l.User)
@@ -347,28 +227,12 @@ public class BookService : IBookService
         var totalCount = await query.CountAsync();
         var likes = await query
             .OrderByDescending(l => l.CreatedOn)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(l => new LikeDto
-            {
-                Id = l.Id,
-                UserId = l.UserId,
-                Username = l.User.Username,
-                AvatarId = l.User.AvatarId,
-                CreatedOn = l.CreatedOn
-            })
             .ToListAsync();
 
-        return new PaginatedResult<LikeDto>
-        {
-            Items = likes,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return _mapper.Map<IEnumerable<LikeDto>>(likes);
     }
 
-    public async Task<PaginatedResult<BookDto>> GetMyBooksAsync(Guid userId, int page, int pageSize)
+    public async Task<IEnumerable<BookDto>> GetMyBooksAsync(Guid userId)
     {
         var query = _context.Books
             .Include(b => b.BookGenres).ThenInclude(bg => bg.Genre)
@@ -378,43 +242,12 @@ public class BookService : IBookService
         var totalCount = await query.CountAsync();
         var books = await query
             .OrderByDescending(b => b.CreatedOn)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(b => new BookDto
-            {
-                Id = b.Id,
-                Title = b.Title,
-                Slug = b.Slug,
-                Excerpt = b.Excerpt ?? string.Empty,
-                AuthorName = b.AuthorName,
-                Description = b.Description,
-                PageAmount = b.PageAmount,
-                YearOfPublish = b.YearOfPublish,
-                FileSizeBytes = b.FileSizeBytes,
-                CreatedOn = b.CreatedOn,
-                ModifiedOn = b.ModifiedOn,
-                Genres = b.BookGenres.Select(bg => new GenreDto { Id = bg.Genre.Id, Name = bg.Genre.Name }).ToList(),
-                CoverFileId = b.CoverFileId,
-                BookFileId = b.BookFileId,
-                Status = b.Status,
-                UserId = b.UserId,
-                Username = b.Author.Username,
-                LikesCount = b.Likes.Count,
-                CommentsCount = b.Comments.Count,
-                ViewsCount = b.Views.Count
-            })
             .ToListAsync();
 
-        return new PaginatedResult<BookDto>
-        {
-            Items = books,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return _mapper.Map<IEnumerable<BookDto>>(books);
     }
 
-    public async Task<PaginatedResult<BookDto>> GetArchivedBooksAsync(Guid userId, int page, int pageSize)
+    public async Task<IEnumerable<BookDto>> GetArchivedBooksAsync(Guid userId)
     {
         var query = _context.Books
             .Include(b => b.BookGenres).ThenInclude(bg => bg.Genre)
@@ -424,40 +257,9 @@ public class BookService : IBookService
         var totalCount = await query.CountAsync();
         var books = await query
             .OrderByDescending(b => b.CreatedOn)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(b => new BookDto
-            {
-                Id = b.Id,
-                Title = b.Title,
-                Slug = b.Slug,
-                Excerpt = b.Excerpt ?? string.Empty,
-                AuthorName = b.AuthorName,
-                Description = b.Description,
-                PageAmount = b.PageAmount,
-                YearOfPublish = b.YearOfPublish,
-                FileSizeBytes = b.FileSizeBytes,
-                CreatedOn = b.CreatedOn,
-                ModifiedOn = b.ModifiedOn,
-                Genres = b.BookGenres.Select(bg => new GenreDto { Id = bg.Genre.Id, Name = bg.Genre.Name }).ToList(),
-                CoverFileId = b.CoverFileId,
-                BookFileId = b.BookFileId,
-                Status = b.Status,
-                UserId = b.UserId,
-                Username = b.Author.Username,
-                LikesCount = b.Likes.Count,
-                CommentsCount = b.Comments.Count,
-                ViewsCount = b.Views.Count
-            })
             .ToListAsync();
 
-        return new PaginatedResult<BookDto>
-        {
-            Items = books,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return _mapper.Map<IEnumerable<BookDto>>(books);
     }
 
     public async Task PublishBookAsync(Guid bookId, Guid userId)
@@ -514,11 +316,5 @@ public class BookService : IBookService
         book.Status = ContentStatus.Draft;
         book.ModifiedOn = DateTime.UtcNow;
         await _context.SaveChangesAsync();
-    }
-    
-
-    private static string GenerateSlug(string title)
-    {
-        return title.ToLower().Replace(" ", "-");
     }
 }

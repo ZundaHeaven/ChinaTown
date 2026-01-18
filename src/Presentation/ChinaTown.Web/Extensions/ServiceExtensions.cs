@@ -2,7 +2,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using AutoMapper;
 using ChinaTown.Application.Data;
+using ChinaTown.Application.Mappers;
 using ChinaTown.Application.Models;
 using ChinaTown.Application.Services;
 using ChinaTown.Domain.Entities;
@@ -31,9 +33,22 @@ public static class ServiceExtensions
         services.AddScoped<IArticleTypeService, ArticleTypeService>();
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IGenreService, GenreService>();
+        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<ILikeService, LikeService>();
         
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.Configure<MongoDbConfig>(configuration.GetSection("MongoDb"));
+        
+        var mapperConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddProfile(new ArticleMapper());
+            mc.AddProfile(new BookMapper());
+            mc.AddProfile(new CommonMapper());
+            mc.AddProfile(new UserMapper());
+        }, LoggerFactory.Create(b => b.AddConsole()));
+
+        IMapper mapper = mapperConfig.CreateMapper();
+        services.AddSingleton(mapper);
 
         return services;
     }

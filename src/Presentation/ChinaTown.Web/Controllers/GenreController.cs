@@ -19,17 +19,10 @@ public class GenreController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetGenres([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetGenres()
     {
-        var result = await _genreService.GetGenresAsync(page, pageSize);
+        var result = await _genreService.GetGenresAsync();
         return Ok(result);
-    }
-
-    [HttpGet("all")]
-    public async Task<IActionResult> GetAllGenres()
-    {
-        var genres = await _genreService.GetAllGenresAsync();
-        return Ok(genres);
     }
 
     [HttpGet("{id}")]

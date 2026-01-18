@@ -1,7 +1,9 @@
+using AutoMapper;
 using ChinaTown.Application.Data;
 using ChinaTown.Application.Dto.Auth;
 using ChinaTown.Application.Dto.User;
 using ChinaTown.Domain.Entities;
+using ChinaTown.Domain.Enums;
 using ChinaTown.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -12,16 +14,19 @@ public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly IMapper _mapper;
     private readonly IPasswordHasher<User> _passwordHasher;
 
     public AuthService(
         ApplicationDbContext context,
         IJwtTokenService jwtTokenService,
+        IMapper mapper,
         IPasswordHasher<User> passwordHasher)
     {
         _context = context;
         _jwtTokenService = jwtTokenService;
         _passwordHasher = passwordHasher;
+        _mapper = mapper;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto)
@@ -31,15 +36,12 @@ public class AuthService : IAuthService
 
         if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
             throw new BadRequestException("Username already exists");
-
-        var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User")
-            ?? throw new NotFoundException("Role 'User' not found");
-
+        
         var user = new User
         {
             Username = dto.Username,
             Email = dto.Email,
-            RoleId = userRole.Id,
+            Role = Role.User,
             PasswordHash = _passwordHasher.HashPassword(null!, dto.Password)
         };
 
@@ -70,14 +72,13 @@ public class AuthService : IAuthService
             RefreshToken = refreshToken,
             AccessTokenExpires = _jwtTokenService.GetAccessTokenExpiration(),
             RefreshTokenExpires = refreshTokenExpires,
-            User = MapToUserDto(user, userRole)
+            User = _mapper.Map<UserDto>(user)
         };
     }
 
     public async Task<AuthResponseDto> LoginAsync(LoginRequestDto dto)
     {
         var user = await _context.Users
-            .Include(u => u.Role)
             .FirstOrDefaultAsync(u => 
                 u.Username == dto.UsernameOrEmail || 
                 u.Email == dto.UsernameOrEmail);
@@ -113,7 +114,7 @@ public class AuthService : IAuthService
             RefreshToken = refreshToken,
             AccessTokenExpires = _jwtTokenService.GetAccessTokenExpiration(),
             RefreshTokenExpires = refreshTokenExpires,
-            User = MapToUserDto(user, user.Role)
+            User = _mapper.Map<UserDto>(user)
         };
     }
 
@@ -121,7 +122,6 @@ public class AuthService : IAuthService
     {
         var refreshTokenEntity = await _context.RefreshTokens
             .Include(rt => rt.User)
-            .ThenInclude(u => u.Role)
             .FirstOrDefaultAsync(rt => rt.Token == refreshToken);
 
         if (refreshTokenEntity == null || 
@@ -156,7 +156,7 @@ public class AuthService : IAuthService
             RefreshToken = newRefreshToken,
             AccessTokenExpires = _jwtTokenService.GetAccessTokenExpiration(),
             RefreshTokenExpires = newRefreshTokenExpires,
-            User = MapToUserDto(user, user.Role)
+            User = _mapper.Map<UserDto>(user)
         };
     }
 
@@ -179,26 +179,11 @@ public class AuthService : IAuthService
     public async Task<UserDto> GetCurrentUserAsync(Guid userId)
     {
         var user = await _context.Users
-            .Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)
             throw new NotFoundException("User not found");
 
-        return MapToUserDto(user, user.Role);
-    }
-
-    private UserDto MapToUserDto(User user, Role role)
-    {
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            AvatarId = user.AvatarId,
-            Role = role.Name,
-            CreatedOn = user.CreatedOn,
-            ModifiedOn = user.ModifiedOn
-        };
+        return _mapper.Map<UserDto>(user);
     }
 }

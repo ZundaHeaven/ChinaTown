@@ -1,3 +1,6 @@
+
+using ChinaTown.Domain.Enums;
+
 namespace ChinaTown.Application.Dto.Common;
 
 public class CommentDto
@@ -7,8 +10,8 @@ public class CommentDto
     public Guid UserId { get; set; }
     public string Username { get; set; } = string.Empty;
     public Guid? AvatarId { get; set; }
-    public Guid? ParentId { get; set; }
-    public int ReplyCount { get; set; }
+    public ContentType ContentType { get; set; }
+    public Guid ContentId { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime ModifiedOn { get; set; }
 }

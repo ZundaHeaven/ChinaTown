@@ -1,6 +1,8 @@
+using AutoMapper;
 using ChinaTown.Application.Data;
 using ChinaTown.Application.Dto.Article;
 using ChinaTown.Application.Dto.Common;
+using ChinaTown.Application.Helpers;
 using ChinaTown.Domain.Entities;
 using ChinaTown.Domain.Enums;
 using ChinaTown.Domain.Exceptions;
@@ -11,31 +13,23 @@ namespace ChinaTown.Application.Services;
 public class ArticleService : IArticleService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ArticleService(ApplicationDbContext context)
+    public ArticleService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<PaginatedResult<ArticleDto>> GetArticlesAsync(ArticleFilterDto filter)
+    public async Task<IEnumerable<ArticleDto>> GetArticlesAsync(ArticleFilterDto filter)
     {
         var query = BuildArticleQuery(filter);
-        var totalCount = await query.CountAsync();
 
-        var articles = await query
-            .Skip((filter.Page - 1) * filter.PageSize)
-            .Take(filter.PageSize)
-            .ToListAsync();
+        var articles = await query.ToListAsync();
 
-        var articleDtos = articles.Select(MapToDto).ToList();
+        var articleDtos = _mapper.Map<IEnumerable<ArticleDto>>(articles);
 
-        return new PaginatedResult<ArticleDto>
-        {
-            Items = articleDtos,
-            TotalCount = totalCount,
-            Page = filter.Page,
-            PageSize = filter.PageSize
-        };
+        return articleDtos;
     }
 
     public async Task<ArticleDto?> GetArticleByIdAsync(Guid id)
@@ -45,13 +39,12 @@ public class ArticleService : IArticleService
             .Include(a => a.ArticleType)
             .Include(a => a.Likes)
             .Include(a => a.Comments)
-            .Include(a => a.Views)
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (article == null)
             return null;
 
-        return MapToDto(article);
+        return _mapper.Map<ArticleDto>(article);
     }
 
     public async Task<ArticleDto?> GetPublishedArticleByIdAsync(Guid id)
@@ -61,13 +54,12 @@ public class ArticleService : IArticleService
             .Include(a => a.ArticleType)
             .Include(a => a.Likes)
             .Include(a => a.Comments)
-            .Include(a => a.Views)
             .FirstOrDefaultAsync(a => a.Id == id && a.Status == ContentStatus.Published);
 
         if (article == null)
             return null;
 
-        return MapToDto(article);
+        return _mapper.Map<ArticleDto>(article);
     }
 
     public async Task<ArticleDto> CreateArticleAsync(ArticleCreateDto dto, Guid authorId)
@@ -82,13 +74,10 @@ public class ArticleService : IArticleService
         if (author == null)
             throw new NotFoundException($"User with id {authorId} not found");
 
-        var slug = GenerateSlug(dto.Title);
+        var slug = SlugHelper.GenerateSlug("article", dto.Title);
 
         var existingArticle = await _context.Articles
             .FirstOrDefaultAsync(c => c.Slug == slug);
-        
-        if (existingArticle != null)
-            slug = $"{slug}-{DateTime.UtcNow.Ticks}";
 
         var article = new Article
         {
@@ -106,7 +95,6 @@ public class ArticleService : IArticleService
         _context.Articles.Add(article);
         await _context.SaveChangesAsync();
 
-        // Получаем созданную статью с включенными зависимостями
         var createdArticle = await _context.Articles
             .Include(a => a.Author)
             .Include(a => a.ArticleType)
@@ -115,7 +103,7 @@ public class ArticleService : IArticleService
         if (createdArticle == null)
             throw new Exception("Failed to create article");
 
-        return MapToDto(createdArticle);
+        return _mapper.Map<ArticleDto>(createdArticle);
     }
 
     public async Task<ArticleDto> UpdateArticleAsync(Guid id, ArticleUpdateDto dto, Guid currentUserId)
@@ -134,14 +122,14 @@ public class ArticleService : IArticleService
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
             
-            if (currentUser?.Role?.Name != "Admin")
+            if (currentUser?.Role.ToString() != "Admin")
                 throw new ForbiddenException("You don't have permission to update this article");
         }
 
         if (!string.IsNullOrWhiteSpace(dto.Title))
         {
             article.Title = dto.Title;
-            article.Slug = GenerateSlug(dto.Title);
+            article.Slug = SlugHelper.GenerateSlug("article", dto.Title);
         }
 
         if (!string.IsNullOrWhiteSpace(dto.Body))
@@ -172,7 +160,6 @@ public class ArticleService : IArticleService
 
         await _context.SaveChangesAsync();
 
-        // Обновляем данные после сохранения
         await _context.Entry(article)
             .Reference(a => a.ArticleType)
             .LoadAsync();
@@ -181,7 +168,7 @@ public class ArticleService : IArticleService
             .Reference(a => a.Author)
             .LoadAsync();
 
-        return MapToDto(article);
+        return _mapper.Map<ArticleDto>(article);
     }
 
     public async Task DeleteArticleAsync(Guid id, Guid currentUserId)
@@ -199,7 +186,7 @@ public class ArticleService : IArticleService
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
             
-            if (currentUser?.Role?.Name != "Admin")
+            if (currentUser?.Role.ToString() != "Admin")
                 throw new ForbiddenException("You don't have permission to delete this article");
         }
 
@@ -207,7 +194,7 @@ public class ArticleService : IArticleService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<PaginatedResult<CommentDto>> GetArticleCommentsAsync(Guid articleId, int page = 1, int pageSize = 20)
+    public async Task<IEnumerable<CommentDto>> GetArticleCommentsAsync(Guid articleId)
     {
         var article = await _context.Articles.FindAsync(articleId);
         if (article == null)
@@ -215,39 +202,17 @@ public class ArticleService : IArticleService
 
         var query = _context.Comments
             .Include(c => c.User)
-            .Where(c => c.ContentId == articleId && c.ParentId == null)
             .OrderByDescending(c => c.CreatedOn);
 
         var totalCount = await query.CountAsync();
 
         var comments = await query
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync();
-
-        var commentDtos = comments.Select(c => new CommentDto
-        {
-            Id = c.Id,
-            Text = c.Text,
-            UserId = c.UserId,
-            Username = c.User.Username,
-            AvatarId = c.User.AvatarId,
-            ParentId = c.ParentId,
-            ReplyCount = c.Replies.Count,
-            CreatedOn = c.CreatedOn,
-            ModifiedOn = c.ModifiedOn
-        }).ToList();
-
-        return new PaginatedResult<CommentDto>
-        {
-            Items = commentDtos,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        
+        return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
-
-    public async Task<PaginatedResult<LikeDto>> GetArticleLikesAsync(Guid articleId, int page = 1, int pageSize = 20)
+    
+    public async Task<IEnumerable<LikeDto>> GetArticleLikesAsync(Guid articleId)
     {
         var article = await _context.Articles.FindAsync(articleId);
         if (article == null)
@@ -261,26 +226,9 @@ public class ArticleService : IArticleService
         var totalCount = await query.CountAsync();
 
         var likes = await query
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync();
 
-        var likeDtos = likes.Select(l => new LikeDto
-        {
-            Id = l.Id,
-            UserId = l.UserId,
-            Username = l.User.Username,
-            AvatarId = l.User.AvatarId,
-            CreatedOn = l.CreatedOn
-        }).ToList();
-
-        return new PaginatedResult<LikeDto>
-        {
-            Items = likeDtos,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return _mapper.Map<IEnumerable<LikeDto>>(likes);
     }
 
     private IQueryable<Article> BuildArticleQuery(ArticleFilterDto filter)
@@ -290,7 +238,6 @@ public class ArticleService : IArticleService
             .Include(a => a.ArticleType)
             .Include(a => a.Likes)
             .Include(a => a.Comments)
-            .Include(a => a.Views)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(filter.Status))
@@ -329,85 +276,12 @@ public class ArticleService : IArticleService
             "oldest" => query.OrderBy(a => a.CreatedOn),
             "most_liked" => query.OrderByDescending(a => a.Likes.Count),
             "most_commented" => query.OrderByDescending(a => a.Comments.Count),
-            "most_viewed" => query.OrderByDescending(a => a.Views.Count),
             _ => query.OrderByDescending(a => a.CreatedOn) 
         };
 
         return query;
     }
 
-    private ArticleDto MapToDto(Article article)
-    {
-        // Используем null-условный оператор для безопасного доступа к коллекциям
-        var likesCount = article.Likes?.Count ?? 0;
-        var commentsCount = article.Comments?.Count ?? 0;
-        var viewsCount = article.Views?.Count ?? 0;
-
-        return new ArticleDto
-        {
-            Id = article.Id,
-            Title = article.Title,
-            Slug = article.Slug,
-            Excerpt = article.Excerpt,
-            Body = article.Body,
-            ReadingTimeMinutes = article.ReadingTimeMinutes,
-            Status = article.Status.ToString(),
-            ArticleType = article.ArticleType?.Name ?? string.Empty,
-            ArticleTypeId = article.ArticleTypeId,
-            AuthorId = article.UserId,
-            AuthorName = article.Author?.Username ?? string.Empty,
-            LikesCount = likesCount,
-            CommentsCount = commentsCount,
-            ViewsCount = viewsCount,
-            CreatedOn = article.CreatedOn,
-            ModifiedOn = article.ModifiedOn
-        };
-    }
-
-    private string GenerateSlug(string title)
-    {
-        if (string.IsNullOrWhiteSpace(title))
-            return string.Empty;
-
-        var slug = title.ToLowerInvariant()
-            .Replace("ё", "е")
-            .Replace(" ", "-")
-            .Replace(",", "")
-            .Replace(".", "")
-            .Replace("!", "")
-            .Replace("?", "")
-            .Replace(":", "")
-            .Replace(";", "")
-            .Replace("(", "")
-            .Replace(")", "")
-            .Replace("\"", "")
-            .Replace("'", "")
-            .Replace("&", "and")
-            .Replace("@", "at")
-            .Replace("#", "sharp")
-            .Replace("%", "percent")
-            .Replace("+", "plus")
-            .Replace("=", "equals");
-
-        // Удаляем множественные дефисы
-        while (slug.Contains("--"))
-        {
-            slug = slug.Replace("--", "-");
-        }
-
-        // Удаляем дефисы в начале и конце
-        slug = slug.Trim('-');
-
-        // Если после обработки slug пустой, генерируем на основе даты
-        if (string.IsNullOrEmpty(slug))
-        {
-            slug = $"article-{DateTime.UtcNow.Ticks}";
-        }
-
-        return slug;
-    }
-
-    // Дополнительные методы для работы со статусами
     public async Task<bool> PublishArticleAsync(Guid articleId, Guid currentUserId)
     {
         var article = await _context.Articles.FindAsync(articleId);
@@ -420,7 +294,7 @@ public class ArticleService : IArticleService
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
             
-            if (currentUser?.Role?.Name != "Admin")
+            if (currentUser?.Role.ToString() != "Admin")
                 throw new ForbiddenException("You don't have permission to publish this article");
         }
 
@@ -443,7 +317,7 @@ public class ArticleService : IArticleService
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
             
-            if (currentUser?.Role?.Name != "Admin")
+            if (currentUser?.Role.ToString() != "Admin")
                 throw new ForbiddenException("You don't have permission to unpublish this article");
         }
 
@@ -466,7 +340,7 @@ public class ArticleService : IArticleService
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
             
-            if (currentUser?.Role?.Name != "Admin")
+            if (currentUser?.Role.ToString() != "Admin")
                 throw new ForbiddenException("You don't have permission to archive this article");
         }
 

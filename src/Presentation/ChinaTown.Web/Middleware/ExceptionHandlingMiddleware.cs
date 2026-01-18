@@ -1,3 +1,4 @@
+using System.Text.Json;
 using ChinaTown.Application.Dto;
 using ChinaTown.Domain.Exceptions;
 
@@ -38,7 +39,6 @@ public class ExceptionHandlingMiddleware
         var statusCode = GetStatusCode(exception);
         var response = new ErrorResponseDto
         {
-            StatusCode = statusCode,
             Message = exception.Message,
             Details = _env.IsDevelopment() ? exception.ToString() : null,
             Errors = GetErrors(exception)
@@ -46,7 +46,7 @@ public class ExceptionHandlingMiddleware
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
-        await context.Response.WriteAsync(response.ToString());
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 
     private static int GetStatusCode(Exception exception) =>

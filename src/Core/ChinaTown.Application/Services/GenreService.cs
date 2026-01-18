@@ -1,3 +1,4 @@
+using AutoMapper;
 using ChinaTown.Application.Data;
 using Microsoft.EntityFrameworkCore;
 using ChinaTown.Application.Dto.Common;
@@ -10,13 +11,15 @@ namespace ChinaTown.Application.Services;
 public class GenreService : IGenreService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public GenreService(ApplicationDbContext context)
+    public GenreService(ApplicationDbContext context,  IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<PaginatedResult<GenreDto>> GetGenresAsync(int page, int pageSize)
+    public async Task<IEnumerable<GenreDto>> GetGenresAsync()
     {
         var query = _context.Genres
             .Include(g => g.BookGenres)
@@ -24,25 +27,9 @@ public class GenreService : IGenreService
 
         var totalCount = await query.CountAsync();
         var genres = await query
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(g => new GenreDto
-            {
-                Id = g.Id,
-                Name = g.Name,
-                CreatedOn = g.CreatedOn,
-                ModifiedOn = g.ModifiedOn,
-                BooksCount = g.BookGenres.Count
-            })
             .ToListAsync();
 
-        return new PaginatedResult<GenreDto>
-        {
-            Items = genres,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize
-        };
+        return _mapper.Map<IEnumerable<GenreDto>>(genres);
     }
 
     public async Task<GenreDto> GetGenreAsync(Guid id)

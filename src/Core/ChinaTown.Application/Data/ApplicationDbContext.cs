@@ -13,13 +13,11 @@ public class ApplicationDbContext : DbContext
     }
     
     public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
     public DbSet<Article> Articles { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Like> Likes { get; set; }
-    public DbSet<View> Views { get; set; }
     
     public DbSet<ArticleType> ArticleTypes { get; set; }
     public DbSet<Genre> Genres { get; set; }
@@ -43,27 +41,7 @@ public class ApplicationDbContext : DbContext
             v => v.ToString(),
             v => (RecipeDifficulty)Enum.Parse(typeof(RecipeDifficulty), v));
 
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.ToTable("Roles");
-            
-            entity.HasIndex(r => r.Name).IsUnique();
-            entity.Property(r => r.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-                
-            entity.Property(r => r.CreatedOn)
-                .HasDefaultValueSql("GETUTCDATE()");
-                
-            entity.Property(r => r.ModifiedOn)
-                .HasDefaultValueSql("GETUTCDATE()");
-            
-            entity.HasData(
-                new Role { Id = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"), Name = "Admin" },
-                new Role { Id = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"), Name = "User" }
-            );
-        });
-
+        
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("Users");
@@ -85,14 +63,9 @@ public class ApplicationDbContext : DbContext
                 
             entity.Property(u => u.CreatedOn)
                 .HasDefaultValueSql("GETUTCDATE()");
-                
+
             entity.Property(u => u.ModifiedOn)
                 .HasDefaultValueSql("GETUTCDATE()");
-                
-            entity.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
         
         modelBuilder.Entity<Content>(entity =>
@@ -223,10 +196,10 @@ public class ApplicationDbContext : DbContext
                 .HasConversion(difficultyConverter)
                 .HasMaxLength(50);
                 
-            entity.Property(r => r.IngredientsJson)
+            entity.Property(r => r.Ingredients)
                 .IsRequired();
                 
-            entity.Property(r => r.InstructionsJson)
+            entity.Property(r => r.Instructions)
                 .IsRequired();
         });
 
@@ -319,11 +292,6 @@ public class ApplicationDbContext : DbContext
                 .WithMany(u => u.Comments)
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-                
-            entity.HasOne(c => c.Parent)
-                .WithMany(c => c.Replies)
-                .HasForeignKey(c => c.ParentId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Like>(entity =>
@@ -347,33 +315,6 @@ public class ApplicationDbContext : DbContext
                 .WithMany(u => u.Likes)
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        modelBuilder.Entity<View>(entity =>
-        {
-            entity.ToTable("Views");
-            
-            entity.Property(v => v.CreatedOn)
-                .HasDefaultValueSql("GETUTCDATE()");
-                
-            entity.Property(v => v.ModifiedOn)
-                .HasDefaultValueSql("GETUTCDATE()");
-            
-            entity.HasOne(v => v.Content)
-                .WithMany(c => c.Views)
-                .HasForeignKey(v => v.ContentId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            entity.HasOne(v => v.User)
-                .WithMany(u => u.Views)
-                .HasForeignKey(v => v.UserId)
-                .OnDelete(DeleteBehavior.SetNull);
-                
-            entity.Property(v => v.IpAddress)
-                .HasMaxLength(100);
-                
-            entity.Property(v => v.UserAgent)
-                .HasMaxLength(500);
         });
 
         modelBuilder.Entity<RefreshToken>(entity =>

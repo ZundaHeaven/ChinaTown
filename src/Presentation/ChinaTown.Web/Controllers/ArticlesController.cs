@@ -47,9 +47,7 @@ public class ArticlesController : ControllerBase
     [HttpGet("my")]
     [Authorize]
     public async Task<ActionResult> GetMyArticles(
-        [FromQuery] string? status = null,
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+        [FromQuery] string? status = null)
     {
         var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
         
@@ -57,8 +55,6 @@ public class ArticlesController : ControllerBase
         {
             Author = currentUserId,
             Status = status,
-            Page = page,
-            PageSize = pageSize,
             Sort = "newest"
         };
         
@@ -71,17 +67,13 @@ public class ArticlesController : ControllerBase
     public async Task<ActionResult> GetAllArticlesAdmin(
         [FromQuery] string? status = null,
         [FromQuery] Guid? authorId = null,
-        [FromQuery] string? search = null,
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 50)
+        [FromQuery] string? search = null)
     {
         var filter = new ArticleFilterDto
         {
             Status = status,
             Author = authorId,
             Search = search,
-            Page = page,
-            PageSize = pageSize,
             Sort = "newest"
         };
         
@@ -164,11 +156,9 @@ public class ArticlesController : ControllerBase
 
     [HttpGet("{id:guid}/comments")]
     public async Task<ActionResult> GetArticleComments(
-        Guid id,
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+        Guid id)
     {
-        var result = await _articleService.GetArticleCommentsAsync(id, page, pageSize);
+        var result = await _articleService.GetArticleCommentsAsync(id);
         return Ok(result);
     }
 
@@ -178,7 +168,7 @@ public class ArticlesController : ControllerBase
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20)
     {
-        var result = await _articleService.GetArticleLikesAsync(id, page, pageSize);
+        var result = await _articleService.GetArticleLikesAsync(id);
         return Ok(result);
     }
 
@@ -188,13 +178,11 @@ public class ArticlesController : ControllerBase
         var filter = new ArticleFilterDto
         {
             Search = slug,
-            Status = "Published",
-            Page = 1,
-            PageSize = 1
+            Status = "Published"
         };
         
         var result = await _articleService.GetArticlesAsync(filter);
-        var article = result.Items.FirstOrDefault(a => a.Slug == slug);
+        var article = result.FirstOrDefault(a => a.Slug == slug);
         
         if (article == null)
             return NotFound();

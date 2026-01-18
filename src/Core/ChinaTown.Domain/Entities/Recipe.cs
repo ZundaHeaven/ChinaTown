@@ -10,8 +10,8 @@ public class Recipe : Content
     }
     
     public required RecipeDifficulty Difficulty { get; set; }
-    public required string IngredientsJson { get; set; }
-    public required string InstructionsJson { get; set; }
+    public required string Ingredients { get; set; }
+    public required string Instructions { get; set; }
     public required int CookTimeMinutes { get; set; }
     public required string ImageUrl { get; set; }
     
