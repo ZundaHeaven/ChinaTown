@@ -187,11 +187,10 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Recipes");
             
             entity.HasBaseType<Content>();
+
+            entity.Property(r => r.ImageId)
+                .IsRequired();
             
-            entity.Property(r => r.ImageUrl)
-                .IsRequired()
-                .HasMaxLength(500);
-                
             entity.Property(r => r.Difficulty)
                 .HasConversion(difficultyConverter)
                 .HasMaxLength(50);

@@ -14,7 +14,20 @@ builder.Services.AddSwaggerWithJwt();
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "NextApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("NextApp"); 
 
 if (app.Environment.IsDevelopment())
 {

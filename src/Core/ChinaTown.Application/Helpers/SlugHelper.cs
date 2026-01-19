@@ -4,9 +4,6 @@ public class SlugHelper
 {
     public static string GenerateSlug(string contentType, string title)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            return string.Empty;
-
         var slug = title.ToLowerInvariant()
             .Replace("ё", "е")
             .Replace(" ", "-")

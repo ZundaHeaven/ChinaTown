@@ -13,7 +13,7 @@ public class Recipe : Content
     public required string Ingredients { get; set; }
     public required string Instructions { get; set; }
     public required int CookTimeMinutes { get; set; }
-    public required string ImageUrl { get; set; }
+    public required Guid ImageId { get; set; }
     
     public virtual ICollection<RecipeTypeClaim> RecipeTypeClaims { get; set; } = new List<RecipeTypeClaim>();
     public virtual ICollection<RecipeRegion> RecipeRegions { get; set; } = new List<RecipeRegion>();

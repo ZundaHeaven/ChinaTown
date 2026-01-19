@@ -79,6 +79,9 @@ public class ArticleService : IArticleService
         var existingArticle = await _context.Articles
             .FirstOrDefaultAsync(c => c.Slug == slug);
 
+        if (existingArticle != null)
+            slug = SlugHelper.GenerateSlug("article", "");
+
         var article = new Article
         {
             Id = Guid.NewGuid(),
@@ -129,7 +132,15 @@ public class ArticleService : IArticleService
         if (!string.IsNullOrWhiteSpace(dto.Title))
         {
             article.Title = dto.Title;
-            article.Slug = SlugHelper.GenerateSlug("article", dto.Title);
+            var slug = SlugHelper.GenerateSlug("Article", dto.Title);
+        
+            var extistedArticle = _context.Books.FirstOrDefault(b => b.Slug == slug);
+
+            if (extistedArticle != null)
+                slug = SlugHelper.GenerateSlug("Article", "");
+
+
+            article.Slug = slug;
         }
 
         if (!string.IsNullOrWhiteSpace(dto.Body))
@@ -257,9 +268,9 @@ public class ArticleService : IArticleService
             query = query.Where(a => a.ArticleType.Name == filter.Type);
         }
 
-        if (filter.Author.HasValue)
+        if (filter.AuthorId.HasValue)
         {
-            query = query.Where(a => a.UserId == filter.Author.Value);
+            query = query.Where(a => a.UserId == filter.AuthorId.Value);
         }
 
         if (!string.IsNullOrWhiteSpace(filter.Search))

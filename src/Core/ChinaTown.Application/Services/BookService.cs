@@ -83,10 +83,17 @@ public class BookService : IBookService
         if (user == null)
             throw new NotFoundException("User not found");
 
+        var slug = SlugHelper.GenerateSlug("Book", dto.Title);
+        
+        var extistedBook = _context.Books.FirstOrDefault(b => b.Slug == slug);
+
+        if (extistedBook != null)
+            slug = SlugHelper.GenerateSlug("Book", "");
+
         var book = new Book
         {
             Title = dto.Title,
-            Slug = SlugHelper.GenerateSlug("book", dto.Title),
+            Slug = slug,
             AuthorName = dto.AuthorName,
             Description = dto.Description,
             PageAmount = dto.PageAmount,
@@ -125,9 +132,17 @@ public class BookService : IBookService
 
         if (book.UserId != userId)
             throw new UnauthorizedException("You can only update your own books");
+        
+        var slug = SlugHelper.GenerateSlug("Book", dto.Title);
+        
+        var extistedBook = _context.Books.FirstOrDefault(b => b.Slug == slug);
+
+        if (extistedBook != null)
+            slug = SlugHelper.GenerateSlug("Book", "");
+
 
         book.Title = dto.Title;
-        book.Slug = SlugHelper.GenerateSlug("book", dto.Title);
+        book.Slug = slug;
         book.AuthorName = dto.AuthorName;
         book.Description = dto.Description;
         book.PageAmount = dto.PageAmount;

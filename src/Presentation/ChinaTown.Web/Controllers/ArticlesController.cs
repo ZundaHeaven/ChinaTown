@@ -53,7 +53,7 @@ public class ArticlesController : ControllerBase
         
         var filter = new ArticleFilterDto
         {
-            Author = currentUserId,
+            AuthorId = currentUserId,
             Status = status,
             Sort = "newest"
         };
@@ -72,7 +72,7 @@ public class ArticlesController : ControllerBase
         var filter = new ArticleFilterDto
         {
             Status = status,
-            Author = authorId,
+            AuthorId = authorId,
             Search = search,
             Sort = "newest"
         };

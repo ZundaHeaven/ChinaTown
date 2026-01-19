@@ -8,7 +8,6 @@ namespace ChinaTown.Web.Controllers;
 
 [ApiController]
 [Route("api/genres")]
-[Authorize(Roles = "Admin")]
 public class GenreController : ControllerBase
 {
     private readonly IGenreService _genreService;
@@ -33,6 +32,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateGenre([FromBody] GenreCreateDto dto)
     {
         var genre = await _genreService.CreateGenreAsync(dto);
@@ -40,6 +40,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateGenre(Guid id, [FromBody] GenreUpdateDto dto)
     {
         var genre = await _genreService.UpdateGenreAsync(id, dto);
@@ -47,6 +48,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteGenre(Guid id)
     {
         await _genreService.DeleteGenreAsync(id);

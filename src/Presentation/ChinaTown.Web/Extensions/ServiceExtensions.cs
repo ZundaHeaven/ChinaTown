@@ -35,6 +35,8 @@ public static class ServiceExtensions
         services.AddScoped<IGenreService, GenreService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ILikeService, LikeService>();
+        services.AddScoped<IRegionService, RegionService>();
+        services.AddScoped<IRecipeTypeService, RecipeTypeService>();
         
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.Configure<MongoDbConfig>(configuration.GetSection("MongoDb"));
@@ -45,6 +47,9 @@ public static class ServiceExtensions
             mc.AddProfile(new BookMapper());
             mc.AddProfile(new CommonMapper());
             mc.AddProfile(new UserMapper());
+            mc.AddProfile(new RecipeMapper());
+            mc.AddProfile(new RegionMapper());
+            mc.AddProfile(new RecipeTypeMapper());
         }, LoggerFactory.Create(b => b.AddConsole()));
 
         IMapper mapper = mapperConfig.CreateMapper();

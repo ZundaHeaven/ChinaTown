@@ -11,39 +11,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db20d197-36e9-4df7-9278-d7c76eb6402c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/ChinaTown.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/ChinaTown.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChinaTown/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChinaTown/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleFilterDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleFilterDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookFilterDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookFilterDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/CommentDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/CommentDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/LikeDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/LikeDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/PaginatedResult.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/ErrorResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/ErrorResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Models/Article/ArticleQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Models/Article/ArticleQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Helpers/SlugHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Helpers/SlugHelper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleTypeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleTypeService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/AuthService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/BookService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/BookService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/GenreService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/GenreService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IArticleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IArticleService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IBookService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IBookService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IGenreService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IGenreService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/JwtTokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/JwtTokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Comment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Comment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Content.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Recipe.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Recipe.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Role.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/View.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/ArticlesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/ArticlesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/BookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/BookController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/GenreController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/GenreController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Extensions/ServiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Extensions/ServiceExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Middleware/ExceptionHandlingMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Middleware/ExceptionHandlingMiddleware.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,17 +36,82 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/384e456bc26f45f5a6a6a20ae50c6e0dd1a400/c9/0054b313/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Data/ApplicationDbContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Data/MongoDbContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleTypeCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleTypeDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleTypeUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Article/ArticleUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Auth/AuthResponseDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Auth/LoginRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Auth/LogoutRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Auth/RefreshTokenRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Auth/RegisterRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/CommentAddDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/CommentDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/CommentUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/LikeDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/ErrorResponseDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Genre/GenreCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Genre/GenreDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Genre/GenreUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/RecipeType/RecipeTypeCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/RecipeType/RecipeTypeDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/RecipeType/RecipeTypeUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Region/RegionCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Region/RegionDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Region/RegionUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/User/AvatarUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/User/UserDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/User/UserUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Helpers/SlugHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/ArticleMapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/BookMapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/CommonMapper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/RecipeMapper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/RecipeTypeMapper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/RegionMapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/UserMapper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Models/Article/ArticleQuery.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Models/JwtSettings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Models/MongoDbConfig.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleTypeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/AuthService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/AvatarService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/BookService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/CommentService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/GenreService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IArticleService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IArticleTypeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IAuthService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IAvatarService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IBookService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ICommentService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IGenreService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IJwtTokenService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ILikeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IRecipeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IRecipeTypeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IRegionService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IUserService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/JwtTokenService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/LikeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RecipeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RecipeTypeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RegionService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/UserService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Article.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/ArticleType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/BaseEntity.cs" root0="FORCE_HIGHLIGHTING" />
@@ -82,13 +125,33 @@
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/RecipeRegion.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/RecipeType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/RecipeTypeClaim.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/RefreshToken.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/Region.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Entities/User.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Enums/ContentStatus.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Enums/ContentType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Enums/RecipeDifficulty.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Enums/Role.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Exceptions/BadRequestException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Exceptions/ForbiddenException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Exceptions/NotFoundException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Exceptions/UnauthorizedException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Core/ChinaTown.Domain/Exceptions/ValidationException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/ArticleTypesController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/ArticlesController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/AuthController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/BookController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/CommentsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/GenreController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RecipeController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RegionController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/UsersController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Extensions/ControllerHelper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Extensions/ServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Middleware/ExceptionHandlingMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/appsettings.Development.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Presentation/ChinaTown.Web/appsettings.json" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -118,12 +181,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.ChinaTown: https">
+  <component name="RunManager" selected=".NET Launch Settings Profile.ChinaTown: http">
     <configuration name="ChinaTown: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/ChinaTown.Web.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net9.0" />
       <option name="LAUNCH_PROFILE_NAME" value="http" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
       <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
@@ -132,6 +194,7 @@
       <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
       <option name="AUTO_ATTACH_CHILDREN" value="0" />
       <option name="RUNTIME_TYPE" value="coreclr" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2">
         <option name="Build" />
       </method>
@@ -140,7 +203,6 @@
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/ChinaTown.Web.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net9.0" />
       <option name="LAUNCH_PROFILE_NAME" value="https" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
       <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
@@ -148,6 +210,7 @@
       <option name="SEND_DEBUG_REQUEST" value="1" />
       <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
       <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2">
         <option name="Build" />
       </method>
@@ -156,7 +219,6 @@
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/ChinaTown.Web.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net9.0" />
       <option name="LAUNCH_PROFILE_NAME" value="http" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
       <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
@@ -164,6 +226,7 @@
       <option name="SEND_DEBUG_REQUEST" value="1" />
       <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
       <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2">
         <option name="Build" />
       </method>
@@ -172,7 +235,6 @@
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/ChinaTown.Web.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net9.0" />
       <option name="LAUNCH_PROFILE_NAME" value="https" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
       <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
@@ -180,6 +242,7 @@
       <option name="SEND_DEBUG_REQUEST" value="1" />
       <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
       <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2">
         <option name="Build" />
       </method>
