@@ -76,7 +76,7 @@ public class ArticleService : IArticleService
 
         var slug = SlugHelper.GenerateSlug("article", dto.Title);
 
-        var existingArticle = await _context.Articles
+        var existingArticle = await _context.Content
             .FirstOrDefaultAsync(c => c.Slug == slug);
 
         if (existingArticle != null)
@@ -134,7 +134,7 @@ public class ArticleService : IArticleService
             article.Title = dto.Title;
             var slug = SlugHelper.GenerateSlug("Article", dto.Title);
         
-            var extistedArticle = _context.Books.FirstOrDefault(b => b.Slug == slug);
+            var extistedArticle = _context.Content.FirstOrDefault(b => b.Slug == slug);
 
             if (extistedArticle != null)
                 slug = SlugHelper.GenerateSlug("Article", "");
@@ -258,10 +258,6 @@ public class ArticleService : IArticleService
                 query = query.Where(a => a.Status == status);
             }
         }
-        else
-        {
-            query = query.Where(a => a.Status == ContentStatus.Published);
-        }
 
         if (!string.IsNullOrWhiteSpace(filter.Type))
         {
@@ -293,7 +289,7 @@ public class ArticleService : IArticleService
         return query;
     }
 
-    public async Task<bool> PublishArticleAsync(Guid articleId, Guid currentUserId)
+    public async Task<bool> ChangeStatusAsync(Guid articleId, Guid currentUserId, ContentStatus status)
     {
         var article = await _context.Articles.FindAsync(articleId);
         if (article == null)
@@ -302,61 +298,17 @@ public class ArticleService : IArticleService
         if (article.UserId != currentUserId)
         {
             var currentUser = await _context.Users
-                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == currentUserId);
             
             if (currentUser?.Role.ToString() != "Admin")
-                throw new ForbiddenException("You don't have permission to publish this article");
+                throw new ForbiddenException("You don't have permission to change status for this article");
         }
 
-        article.Status = ContentStatus.Published;
+        article.Status = status;
         article.ModifiedOn = DateTime.UtcNow;
-
-        await _context.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> UnpublishArticleAsync(Guid articleId, Guid currentUserId)
-    {
-        var article = await _context.Articles.FindAsync(articleId);
-        if (article == null)
-            throw new NotFoundException($"Article with id {articleId} not found");
-
-        if (article.UserId != currentUserId)
-        {
-            var currentUser = await _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Id == currentUserId);
-            
-            if (currentUser?.Role.ToString() != "Admin")
-                throw new ForbiddenException("You don't have permission to unpublish this article");
-        }
-
-        article.Status = ContentStatus.Draft;
-        article.ModifiedOn = DateTime.UtcNow;
-
-        await _context.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> ArchiveArticleAsync(Guid articleId, Guid currentUserId)
-    {
-        var article = await _context.Articles.FindAsync(articleId);
-        if (article == null)
-            throw new NotFoundException($"Article with id {articleId} not found");
-
-        if (article.UserId != currentUserId)
-        {
-            var currentUser = await _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Id == currentUserId);
-            
-            if (currentUser?.Role.ToString() != "Admin")
-                throw new ForbiddenException("You don't have permission to archive this article");
-        }
-
-        article.Status = ContentStatus.Archived;
-        article.ModifiedOn = DateTime.UtcNow;
+        
+        _context.Update(article);
+        
 
         await _context.SaveChangesAsync();
         return true;

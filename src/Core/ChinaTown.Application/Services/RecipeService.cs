@@ -29,6 +29,8 @@ public class RecipeService : IRecipeService
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
             .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
             .Include(r => r.Author)
+            .Include(r => r.Comments)
+            .Include(r => r.Likes)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(filter.Title))
@@ -71,6 +73,8 @@ public class RecipeService : IRecipeService
         var recipe = await _context.Recipes
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
             .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
+            .Include(r => r.Comments)
+            .Include(r => r.Likes)
             .Include(r => r.Author)
             .FirstOrDefaultAsync(r => r.Id == id);
 
@@ -88,7 +92,7 @@ public class RecipeService : IRecipeService
 
         var slug = SlugHelper.GenerateSlug("Recipe", dto.Title);
         
-        var existedRecipe = _context.Recipes.FirstOrDefault(r => r.Slug == slug);
+        var existedRecipe = _context.Content.FirstOrDefault(r => r.Slug == slug);
         if (existedRecipe != null)
             slug = SlugHelper.GenerateSlug("Recipe", "");
 
@@ -139,7 +143,8 @@ public class RecipeService : IRecipeService
     {
         var recipe = await _context.Recipes
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
-            .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
+            .Include(r => r.Comments)
+            .Include(r => r.Likes).Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
             .FirstOrDefaultAsync(r => r.Id == id);
 
         if (recipe == null)
@@ -149,9 +154,15 @@ public class RecipeService : IRecipeService
             throw new UnauthorizedException("You can only update your own recipes");
 
         var slug = SlugHelper.GenerateSlug("Recipe", dto.Title);
-        var existedRecipe = _context.Recipes.FirstOrDefault(r => r.Slug == slug && r.Id != id);
+        var existedRecipe = _context.Content.FirstOrDefault(r => r.Slug == slug && r.Id != id);
         if (existedRecipe != null)
             slug = SlugHelper.GenerateSlug("Recipe", "");
+        
+        if (!string.IsNullOrWhiteSpace(dto.Status))
+        {
+            if (Enum.TryParse<ContentStatus>(dto.Status, out var status))
+                recipe.Status = status;
+        }
 
         recipe.Title = dto.Title;
         recipe.Slug = slug;
@@ -212,9 +223,12 @@ public class RecipeService : IRecipeService
         var recipe = await _context.Recipes.FindAsync(recipeId);
         if (recipe == null)
             throw new NotFoundException("Recipe not found");
+        
 
         await _mongoDb.UploadFileAsync(fileId, fileName, stream);
         recipe.ModifiedOn = DateTime.UtcNow;
+        recipe.ImageId = fileId;
+        
         await _context.SaveChangesAsync();
     }
 
@@ -232,7 +246,8 @@ public class RecipeService : IRecipeService
         var query = _context.Recipes
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
             .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
-            .Include(r => r.Author)
+            .Include(r => r.Comments)
+            .Include(r => r.Likes).Include(r => r.Author)
             .Where(r => r.UserId == userId);
 
         var recipes = await query
@@ -247,7 +262,8 @@ public class RecipeService : IRecipeService
         var query = _context.Recipes
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
             .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
-            .Include(r => r.Author)
+            .Include(r => r.Comments)
+            .Include(r => r.Likes).Include(r => r.Author)
             .Where(r => r.UserId == userId && r.Status == ContentStatus.Archived);
 
         var recipes = await query
@@ -256,62 +272,7 @@ public class RecipeService : IRecipeService
 
         return _mapper.Map<IEnumerable<RecipeDto>>(recipes);
     }
-
-    public async Task PublishRecipeAsync(Guid recipeId, Guid userId)
-    {
-        var recipe = await _context.Recipes.FindAsync(recipeId);
-        if (recipe == null)
-            throw new NotFoundException("Recipe not found");
-
-        if (recipe.UserId != userId)
-            throw new UnauthorizedException("You can only publish your own recipes");
-
-        recipe.Status = ContentStatus.Published;
-        recipe.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UnpublishRecipeAsync(Guid recipeId, Guid userId)
-    {
-        var recipe = await _context.Recipes.FindAsync(recipeId);
-        if (recipe == null)
-            throw new NotFoundException("Recipe not found");
-
-        if (recipe.UserId != userId)
-            throw new UnauthorizedException("You can only unpublish your own recipes");
-
-        recipe.Status = ContentStatus.Draft;
-        recipe.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task ArchiveRecipeAsync(Guid recipeId, Guid userId)
-    {
-        var recipe = await _context.Recipes.FindAsync(recipeId);
-        if (recipe == null)
-            throw new NotFoundException("Recipe not found");
-
-        if (recipe.UserId != userId)
-            throw new UnauthorizedException("You can only archive your own recipes");
-
-        recipe.Status = ContentStatus.Archived;
-        recipe.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task RestoreRecipeAsync(Guid recipeId, Guid userId)
-    {
-        var recipe = await _context.Recipes.FindAsync(recipeId);
-        if (recipe == null)
-            throw new NotFoundException("Recipe not found");
-
-        if (recipe.UserId != userId)
-            throw new UnauthorizedException("You can only restore your own recipes");
-
-        recipe.Status = ContentStatus.Draft;
-        recipe.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-    }
+    
 
     public async Task<IEnumerable<CommentDto>> GetCommentsAsync(Guid recipeId)
     {
@@ -333,5 +294,29 @@ public class RecipeService : IRecipeService
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<LikeDto>>(likes);
+    }
+    
+    public async Task<bool> ChangeStatusAsync(Guid recipeId, Guid currentUserId, ContentStatus status)
+    {
+        var recipe = await _context.Recipes.FindAsync(recipeId);
+        if (recipe == null)
+            throw new NotFoundException($"Recipe with id {recipeId} not found");
+
+        if (recipe.UserId != currentUserId)
+        {
+            var currentUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == currentUserId);
+            
+            if (currentUser?.Role.ToString() != "Admin")
+                throw new ForbiddenException("You don't have permission to change status for this recipe");
+        }
+
+        recipe.Status = status;
+        recipe.ModifiedOn = DateTime.UtcNow;
+        
+        _context.Update(recipe);
+        
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

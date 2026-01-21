@@ -1,3 +1,4 @@
+using ChinaTown.Application.Dto.Genre;
 using ChinaTown.Domain.Enums;
 
 namespace ChinaTown.Application.Dto.Book;
@@ -23,10 +24,4 @@ public class BookDto
     public string Username { get; set; } = string.Empty;
     public int LikesCount { get; set; }
     public int CommentsCount { get; set; }
-}
-
-public class GenreDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
 }

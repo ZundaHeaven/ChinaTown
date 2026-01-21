@@ -11,8 +11,10 @@ public class BookUpdateDto
     [Required]
     public string Description { get; set; } = string.Empty;
     [Required]
+    public string Status { get; set; } = string.Empty;
+    [Required]
     public int PageAmount { get; set; }
     [Required]
     public int YearOfPublish { get; set; }
-    public List<Guid> GenreIds { get; set; } = new();
+    public IEnumerable<Guid> GenreIds { get; set; }
 }

@@ -8,7 +8,6 @@ namespace ChinaTown.Web.Controllers;
 
 [ApiController]
 [Route("api/regions")]
-[Authorize(Roles = "Admin")]
 public class RegionController : ControllerBase
 {
     private readonly IRegionService _regionService;
@@ -33,6 +32,7 @@ public class RegionController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] RegionCreateDto dto)
     {
         var region = await _regionService.CreateAsync(dto);
@@ -40,6 +40,7 @@ public class RegionController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] RegionUpdateDto dto)
     {
         var region = await _regionService.UpdateAsync(id, dto);
@@ -47,6 +48,7 @@ public class RegionController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await _regionService.DeleteAsync(id);

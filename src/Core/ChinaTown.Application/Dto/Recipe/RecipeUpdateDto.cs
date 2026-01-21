@@ -11,6 +11,8 @@ public class RecipeUpdateDto
     [Required]
     [EnumDataType(typeof(RecipeDifficulty))]
     public RecipeDifficulty Difficulty { get; set; }
+    [Required]
+    public string Status { get; set; } = string.Empty;
     
     [Required]
     public string Ingredients { get; set; } = string.Empty;

@@ -69,6 +69,7 @@ public class RegionService : IRegionService
             throw new BadRequestException($"Region with name '{dto.Name}' already exists");
 
         _mapper.Map(dto, region);
+        
         region.ModifiedOn = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();

@@ -1,7 +1,9 @@
 using ChinaTown.Application.Dto.Article;
 using ChinaTown.Application.Services;
+using ChinaTown.Domain.Enums;
 using ChinaTown.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChinaTown.Web.Controllers;
@@ -25,21 +27,12 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize]
     public async Task<ActionResult<ArticleDto>> GetArticle(Guid id)
     {
         var article = await _articleService.GetArticleByIdAsync(id);
         
         if (article == null)
             return NotFound();
-            
-        var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
-        var isAdmin = User.IsInRole("Admin");
-        
-        if (article.Status != "Published" && article.AuthorId != currentUserId && !isAdmin)
-        {
-            return NotFound();
-        }
         
         return Ok(article);
     }
@@ -61,26 +54,7 @@ public class ArticlesController : ControllerBase
         var result = await _articleService.GetArticlesAsync(filter);
         return Ok(result);
     }
-
-    [HttpGet("admin/all")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> GetAllArticlesAdmin(
-        [FromQuery] string? status = null,
-        [FromQuery] Guid? authorId = null,
-        [FromQuery] string? search = null)
-    {
-        var filter = new ArticleFilterDto
-        {
-            Status = status,
-            AuthorId = authorId,
-            Search = search,
-            Sort = "newest"
-        };
-        
-        var result = await _articleService.GetArticlesAsync(filter);
-        return Ok(result);
-    }
-
+    
     [HttpPost]
     [Authorize]
     public async Task<ActionResult<ArticleDto>> CreateArticle(ArticleCreateDto dto)
@@ -90,52 +64,28 @@ public class ArticlesController : ControllerBase
         return CreatedAtAction(nameof(GetArticle), new { id = article.Id }, article);
     }
 
-    [HttpPost("{id:guid}/publish")]
+    [HttpPatch("{id:guid}/status")]
     [Authorize]
-    public async Task<ActionResult> PublishArticle(Guid id)
+    public async Task<ActionResult> ChangeStatus(Guid id, [FromBody] string status)
     {
         var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
-        var updateDto = new ArticleUpdateDto
-        {
-            Status = "Published"
-        };
-        
-        await _articleService.UpdateArticleAsync(id, updateDto, currentUserId);
-        
-        return Ok(new { message = "Article published successfully" });
-    }
 
-    [HttpPost("{id:guid}/unpublish")]
-    [Authorize]
-    public async Task<ActionResult> UnpublishArticle(Guid id)
-    {
-        var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
-        
-        var updateDto = new ArticleUpdateDto
+        if (status != nameof(ContentStatus.Archived) &&
+            status != nameof(ContentStatus.Draft) &&
+            status != nameof(ContentStatus.Published))
         {
-            Status = "Draft"
-        };
+            return BadRequest(new {message = "Invalid status"});
+        }
         
-        await _articleService.UpdateArticleAsync(id, updateDto, currentUserId);
+        ContentStatus contentStatus = status == nameof(ContentStatus.Archived) ? ContentStatus.Archived 
+            : status == nameof(ContentStatus.Draft) ? ContentStatus.Draft 
+            : ContentStatus.Archived;
         
-        return Ok(new { message = "Article unpublished successfully" });
+        await _articleService.ChangeStatusAsync(id, currentUserId, contentStatus);
+        
+        return Ok(new { message = "Article changed successfully" });
     }
-
-    [HttpPost("{id:guid}/archive")]
-    [Authorize]
-    public async Task<ActionResult> ArchiveArticle(Guid id)
-    {
-        var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
-        var updateDto = new ArticleUpdateDto
-        {
-            Status = "Archived"
-        };
-        
-        await _articleService.UpdateArticleAsync(id, updateDto, currentUserId);
-        
-        return Ok(new { message = "Article archived successfully" });
-    }
-
+    
     [HttpPut("{id:guid}")]
     [Authorize]
     public async Task<ActionResult<ArticleDto>> UpdateArticle(Guid id, ArticleUpdateDto dto)
@@ -188,24 +138,5 @@ public class ArticlesController : ControllerBase
             return NotFound();
         
         return Ok(article);
-    }
-
-    [HttpPost("{id:guid}/restore")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> RestoreArticle(Guid id)
-    {
-        var article = await _articleService.GetArticleByIdAsync(id);
-        if (article == null)
-            return NotFound();
-        
-        var updateDto = new ArticleUpdateDto
-        {
-            Status = "Draft"
-        };
-        
-        var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
-        var updatedArticle = await _articleService.UpdateArticleAsync(id, updateDto, currentUserId);
-        
-        return Ok(updatedArticle);
     }
 }

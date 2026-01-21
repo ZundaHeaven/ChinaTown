@@ -29,6 +29,8 @@ public class BookService : IBookService
     {
         var query = _context.Books
             .Include(b => b.BookGenres).ThenInclude(bg => bg.Genre)
+            .Include(b=> b.Likes)
+            .Include(b=> b.Comments)
             .Include(b => b.Author)
             .AsQueryable();
 
@@ -68,6 +70,8 @@ public class BookService : IBookService
     {
         var book = await _context.Books
             .Include(b => b.BookGenres).ThenInclude(bg => bg.Genre)
+            .Include(b=> b.Likes)
+            .Include(b=> b.Comments)
             .Include(b => b.Author)
             .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -85,7 +89,7 @@ public class BookService : IBookService
 
         var slug = SlugHelper.GenerateSlug("Book", dto.Title);
         
-        var extistedBook = _context.Books.FirstOrDefault(b => b.Slug == slug);
+        var extistedBook = _context.Content.FirstOrDefault(b => b.Slug == slug);
 
         if (extistedBook != null)
             slug = SlugHelper.GenerateSlug("Book", "");
@@ -125,6 +129,8 @@ public class BookService : IBookService
         var book = await _context.Books
             .Include(b => b.BookGenres).ThenInclude(bg => bg.Genre)
             .Include(b => b.Author)
+            .Include(b => b.Likes)
+            .Include(b => b.Comments)
             .FirstOrDefaultAsync(b => b.Id == id);
 
         if (book == null)
@@ -135,11 +141,16 @@ public class BookService : IBookService
         
         var slug = SlugHelper.GenerateSlug("Book", dto.Title);
         
-        var extistedBook = _context.Books.FirstOrDefault(b => b.Slug == slug);
+        var extistedBook = _context.Content.FirstOrDefault(b => b.Slug == slug);
 
         if (extistedBook != null)
             slug = SlugHelper.GenerateSlug("Book", "");
-
+        
+        if (!string.IsNullOrWhiteSpace(dto.Status))
+        {
+            if (Enum.TryParse<ContentStatus>(dto.Status, out var status))
+                book.Status = status;
+        }
 
         book.Title = dto.Title;
         book.Slug = slug;
@@ -195,6 +206,9 @@ public class BookService : IBookService
         await _mongoDb.UploadFileAsync(fileId, fileName, stream);
         book.CoverFileId = fileId;
         book.ModifiedOn = DateTime.UtcNow;
+        
+        book.CoverFileId =  fileId;
+        
         await _context.SaveChangesAsync();
     }
 
@@ -225,7 +239,6 @@ public class BookService : IBookService
         var query = _context.Comments
             .Include(c => c.User);
 
-        var totalCount = await query.CountAsync();
         var comments = await query
             .OrderByDescending(c => c.CreatedOn)
             .ToListAsync();
@@ -276,60 +289,28 @@ public class BookService : IBookService
 
         return _mapper.Map<IEnumerable<BookDto>>(books);
     }
-
-    public async Task PublishBookAsync(Guid bookId, Guid userId)
+    
+    public async Task<bool> ChangeStatusAsync(Guid bookId, Guid currentUserId, ContentStatus status)
     {
         var book = await _context.Books.FindAsync(bookId);
         if (book == null)
-            throw new NotFoundException("Book not found");
+            throw new NotFoundException($"Book with id {bookId} not found");
 
-        if (book.UserId != userId)
-            throw new UnauthorizedException("You can only publish your own books");
+        if (book.UserId != currentUserId)
+        {
+            var currentUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == currentUserId);
+            
+            if (currentUser?.Role.ToString() != "Admin")
+                throw new ForbiddenException("You don't have permission to change status for this book");
+        }
 
-        book.Status = ContentStatus.Published;
+        book.Status = status;
         book.ModifiedOn = DateTime.UtcNow;
+        
+        _context.Update(book);
+
         await _context.SaveChangesAsync();
-    }
-
-    public async Task UnpublishBookAsync(Guid bookId, Guid userId)
-    {
-        var book = await _context.Books.FindAsync(bookId);
-        if (book == null)
-            throw new NotFoundException("Book not found");
-
-        if (book.UserId != userId)
-            throw new UnauthorizedException("You can only unpublish your own books");
-
-        book.Status = ContentStatus.Draft;
-        book.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task ArchiveBookAsync(Guid bookId, Guid userId)
-    {
-        var book = await _context.Books.FindAsync(bookId);
-        if (book == null)
-            throw new NotFoundException("Book not found");
-
-        if (book.UserId != userId)
-            throw new UnauthorizedException("You can only archive your own books");
-
-        book.Status = ContentStatus.Archived;
-        book.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task RestoreBookAsync(Guid bookId, Guid userId)
-    {
-        var book = await _context.Books.FindAsync(bookId);
-        if (book == null)
-            throw new NotFoundException("Book not found");
-
-        if (book.UserId != userId)
-            throw new UnauthorizedException("You can only restore your own books");
-
-        book.Status = ContentStatus.Draft;
-        book.ModifiedOn = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
+        return true;
     }
 }

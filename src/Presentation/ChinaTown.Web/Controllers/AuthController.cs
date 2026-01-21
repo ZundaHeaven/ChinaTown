@@ -43,7 +43,7 @@ public class AuthController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Logout(LogoutRequestDto dto)
     {
-        var userId = ControllerHelper.GetUserIdFromPrincipals(User);;
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);        
         await _authService.LogoutAsync(userId, dto.RefreshToken);
         return NoContent();
     }

@@ -37,6 +37,8 @@ public static class ServiceExtensions
         services.AddScoped<ILikeService, LikeService>();
         services.AddScoped<IRegionService, RegionService>();
         services.AddScoped<IRecipeTypeService, RecipeTypeService>();
+        services.AddScoped<ILikeService, LikeService>();
+        services.AddScoped<IRecipeService, RecipeService>();
         
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.Configure<MongoDbConfig>(configuration.GetSection("MongoDb"));

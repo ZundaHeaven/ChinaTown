@@ -15,6 +15,7 @@ public class RecipeDto
     public int CookTimeMinutes { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime ModifiedOn { get; set; }
+    public Guid ImageId {get; set;}
     public List<RecipeTypeDto> RecipeTypes { get; set; } = new();
     public List<RegionDto> Regions { get; set; } = new();
     public string Status { get; set; } = string.Empty;

@@ -6,5 +6,4 @@ public class GenreDto
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedOn { get; set; }
     public DateTime ModifiedOn { get; set; }
-    public int BooksCount { get; set; }
 }

@@ -20,6 +20,9 @@ public class LikeService : ILikeService
     public async Task<IEnumerable<LikeDto>> GetLikesAsync(Guid contentId)
     {
         var likes = await _dbContext.Likes
+            .Include(l => l.User)
+            .Include(l => l.Content)
+            .ThenInclude(l => l.Author)
             .Where(a => a.ContentId == contentId)
             .ToListAsync();
         
@@ -29,6 +32,9 @@ public class LikeService : ILikeService
     public async Task ToggleLikeAsync(Guid contentId, Guid userId)
     {
         var like = await _dbContext.Likes
+            .Include(l => l.User)
+            .Include(l => l.Content)
+            .ThenInclude(l => l.Author)
             .Where(a => a.ContentId == contentId && a.UserId == userId)
             .FirstOrDefaultAsync();
 
@@ -40,7 +46,8 @@ public class LikeService : ILikeService
         {
             var newLike = new Like
             {
-                UserId = userId
+                UserId = userId,
+                ContentId = contentId
             };
             
             _dbContext.Likes.Add(newLike);
@@ -52,6 +59,9 @@ public class LikeService : ILikeService
     public async Task<IEnumerable<LikeDto>> GetUserLikesAsync(Guid userId)
     {
         var likes = await _dbContext.Likes
+            .Include(l => l.Content)
+            .ThenInclude(l => l.Author)
+            .Include(l => l.User)
             .Where(a => a.UserId == userId)
             .ToListAsync();
         

@@ -8,7 +8,13 @@ public class LikeDto
     public Guid UserId { get; set; }
     public string Username { get; set; } = string.Empty;
     public Guid? AvatarId { get; set; }
-    public ContentType ContentType { get; set; }
+    public string ContentType { get; set; }
     public Guid ContentId { get; set; }
     public DateTime CreatedOn { get; set; }
+    public string Title = string.Empty;
+    public string Slug { get; set; }
+    public string? Excerpt { get; set; }
+    public required Guid AuthorId { get; set; }
+    public string AuthorName { get; set; } = null!;
+    public string Status { get; set; }
 }

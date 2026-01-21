@@ -1,9 +1,11 @@
+using ChinaTown.Application.Dto.Article;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ChinaTown.Application.Dto.Book;
 using ChinaTown.Application.Services;
 using ChinaTown.Domain.Enums;
 using ChinaTown.Domain.Exceptions;
+using ChinaTown.Web.Extensions;
 
 namespace ChinaTown.Web.Controllers;
 
@@ -36,7 +38,7 @@ public class BookController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateBook([FromBody] BookCreateDto dto)
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         var book = await _bookService.CreateBookAsync(dto, userId);
         return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
     }
@@ -45,7 +47,7 @@ public class BookController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBook(Guid id, [FromBody] BookUpdateDto dto)
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         var book = await _bookService.UpdateBookAsync(id, dto, userId);
         return Ok(book);
     }
@@ -54,7 +56,7 @@ public class BookController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(Guid id)
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         await _bookService.DeleteBookAsync(id, userId);
         return NoContent();
     }
@@ -71,11 +73,12 @@ public class BookController : ControllerBase
 
     [Authorize]
     [HttpPost("{id}/file")]
-    public async Task<IActionResult> UploadBookFile(Guid id, IFormFile file)
+    public async Task<IActionResult> UploadBookFile(Guid id, IFormFile bookFile)
     {
         var fileId = Guid.NewGuid();
-        using var stream = file.OpenReadStream();
-        await _bookService.UploadBookFileAsync(id, fileId, file.FileName, stream, (int)file.Length);
+        var stream = bookFile.OpenReadStream();
+        await _bookService.UploadBookFileAsync(id, fileId, bookFile.FileName, stream, (int)bookFile.Length);
+        stream.Close();
         return Ok(new { fileId });
     }
 
@@ -104,61 +107,30 @@ public class BookController : ControllerBase
     [HttpGet("my")]
     public async Task<IActionResult> GetMyBooks()
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         var result = await _bookService.GetMyBooksAsync(userId);
         return Ok(result);
     }
-
+    
+    [HttpPatch("{id:guid}/status")]
     [Authorize]
-    [HttpGet("archive")]
-    public async Task<IActionResult> GetArchivedBooks()
+    public async Task<ActionResult> ChangeStatus(Guid id, [FromBody] string status)
     {
-        var userId = GetCurrentUserId();
-        var result = await _bookService.GetArchivedBooksAsync(userId);
-        return Ok(result);
-    }
+        var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
 
-    [Authorize]
-    [HttpPost("{id}/publish")]
-    public async Task<IActionResult> PublishBook(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _bookService.PublishBookAsync(id, userId);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpPost("{id}/unpublish")]
-    public async Task<IActionResult> UnpublishBook(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _bookService.UnpublishBookAsync(id, userId);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpPost("{id}/archive")]
-    public async Task<IActionResult> ArchiveBook(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _bookService.ArchiveBookAsync(id, userId);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpPost("{id}/restore")]
-    public async Task<IActionResult> RestoreBook(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _bookService.RestoreBookAsync(id, userId);
-        return NoContent();
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        var userId = User.FindFirst("userId")?.Value;
-        if (string.IsNullOrEmpty(userId))
-            throw new UnauthorizedException("User not authenticated");
-        return Guid.Parse(userId);
+        if (status != nameof(ContentStatus.Archived) &&
+            status != nameof(ContentStatus.Draft) &&
+            status != nameof(ContentStatus.Published))
+        {
+            return BadRequest(new {message = "Invalid status"});
+        }
+        
+        ContentStatus contentStatus = status == nameof(ContentStatus.Archived) ? ContentStatus.Archived 
+            : status == nameof(ContentStatus.Draft) ? ContentStatus.Draft 
+            : ContentStatus.Archived;
+        
+        await _bookService.ChangeStatusAsync(id, currentUserId, contentStatus);
+        
+        return Ok(new { message = "Book status changed successfully" });
     }
 }

@@ -26,7 +26,19 @@ public class CommonMapper : Profile
             .ForMember(dest => dest.Username,
                 opt => opt.MapFrom(src => src.User.Username))
             .ForMember(dest => dest.ContentType,
-                opt => opt.MapFrom(src => src.Content.ContentType));
+                opt => opt.MapFrom(src => src.Content.ContentType.ToString()))
+            .ForMember(dest => dest.AuthorId,
+                opt => opt.MapFrom(l => l.Content.UserId))
+            .ForMember(dest => dest.Title,
+                opt => opt.MapFrom(l => l.Content.Title))
+            .ForMember(dest => dest.AuthorName,
+                opt => opt.MapFrom(l => l.Content.Author.Username))
+            .ForMember(dest => dest.Slug,
+                opt => opt.MapFrom(l => l.Content.Slug))
+            .ForMember(dest => dest.Excerpt,
+                opt => opt.MapFrom(l => l.Content.Excerpt))
+            .ForMember(dest => dest.Status,
+                opt => opt.MapFrom(l => l.Content.Status.ToString()));
         
         CreateMap<LikeDto, Like>()
             .ForMember(dest => dest.User,

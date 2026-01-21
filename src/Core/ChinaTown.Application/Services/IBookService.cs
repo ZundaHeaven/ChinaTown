@@ -1,5 +1,6 @@
 using ChinaTown.Application.Dto.Book;
 using ChinaTown.Application.Dto.Common;
+using ChinaTown.Domain.Enums;
 
 namespace ChinaTown.Application.Services;
 
@@ -17,8 +18,5 @@ public interface IBookService
     Task<IEnumerable<LikeDto>> GetLikesAsync(Guid bookId);
     Task<IEnumerable<BookDto>> GetMyBooksAsync(Guid userId);
     Task<IEnumerable<BookDto>> GetArchivedBooksAsync(Guid userId);
-    Task PublishBookAsync(Guid bookId, Guid userId);
-    Task UnpublishBookAsync(Guid bookId, Guid userId);
-    Task ArchiveBookAsync(Guid bookId, Guid userId);
-    Task RestoreBookAsync(Guid bookId, Guid userId);
+    Task<bool> ChangeStatusAsync(Guid bookId, Guid currentUserId, ContentStatus status);
 }

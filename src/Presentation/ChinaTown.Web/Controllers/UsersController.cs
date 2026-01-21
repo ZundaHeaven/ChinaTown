@@ -9,7 +9,6 @@ namespace ChinaTown.Web.Controllers;
 
 [ApiController]
 [Route("api/users")]
-[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -37,6 +36,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<UserDto>> UpdateUser(Guid id, UserUpdateDto dto)
     {
         var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
@@ -45,6 +45,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPatch("{id:guid}/avatar")]
+    [Authorize]
     public async Task<ActionResult<Guid>> UpdateAvatar(Guid id, [FromForm] AvatarUpdateDto dto)
     {
         if (dto.AvatarFile == null || dto.AvatarFile.Length == 0)

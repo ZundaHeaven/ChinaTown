@@ -13,6 +13,7 @@ public class ApplicationDbContext : DbContext
     }
     
     public DbSet<User> Users { get; set; }
+    public DbSet<Content> Content { get; set; }
     public DbSet<Article> Articles { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<Recipe> Recipes { get; set; }

@@ -1,5 +1,6 @@
 using AutoMapper;
 using ChinaTown.Application.Dto.Book;
+using ChinaTown.Application.Dto.Genre;
 using ChinaTown.Domain.Entities;
 
 namespace ChinaTown.Application.Mappers;
@@ -9,13 +10,13 @@ public class BookMapper : Profile
     public BookMapper()
     {
         CreateMap<Book, BookDto>()
-            .ForMember(dest => dest.Genres, 
-                opt => opt.MapFrom(src => src.BookGenres.ToList()))
-            .ForMember(dest => dest.Username, 
+            .ForMember(dest => dest.Genres,
+                opt => opt.MapFrom(src => src.BookGenres.Select(b => b.Genre)))
+            .ForMember(dest => dest.Username,
                 opt => opt.MapFrom(src => src.Author.Username))
-            .ForMember(dest => dest.LikesCount, 
+            .ForMember(dest => dest.LikesCount,
                 opt => opt.MapFrom(src => src.Likes.Count))
-            .ForMember(dest => dest.CommentsCount, 
+            .ForMember(dest => dest.CommentsCount,
                 opt => opt.MapFrom(src => src.Comments.Count));
         CreateMap<BookDto, Book>()
             .ForMember(dest => dest.BookGenres,
@@ -26,5 +27,8 @@ public class BookMapper : Profile
                 opt => opt.Ignore())
             .ForMember(dest => dest.Comments,
                 opt => opt.Ignore());
+        CreateMap<Genre, GenreDto>();
+        CreateMap<GenreDto, Genre>().
+            ForMember(dest => dest.BookGenres, opt => opt.Ignore());
     }
 }

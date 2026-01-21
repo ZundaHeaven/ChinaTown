@@ -7,7 +7,6 @@ namespace ChinaTown.Web.Controllers;
 
 [ApiController]
 [Route("api/recipe-types")]
-[Authorize(Roles = "Admin")]
 public class RecipeTypeController : ControllerBase
 {
     private readonly IRecipeTypeService _recipeTypeService;
@@ -32,6 +31,7 @@ public class RecipeTypeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] RecipeTypeCreateDto dto)
     {
         var recipeType = await _recipeTypeService.CreateAsync(dto);
@@ -39,6 +39,7 @@ public class RecipeTypeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] RecipeTypeUpdateDto dto)
     {
         var recipeType = await _recipeTypeService.UpdateAsync(id, dto);
@@ -46,6 +47,7 @@ public class RecipeTypeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await _recipeTypeService.DeleteAsync(id);

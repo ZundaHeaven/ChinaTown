@@ -21,12 +21,8 @@ public class GenreService : IGenreService
 
     public async Task<IEnumerable<GenreDto>> GetGenresAsync()
     {
-        var query = _context.Genres
-            .Include(g => g.BookGenres)
-            .OrderBy(g => g.Name);
-
-        var totalCount = await query.CountAsync();
-        var genres = await query
+        var genres = await _context.Genres
+            .OrderBy(g => g.Name)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<GenreDto>>(genres);
@@ -47,7 +43,6 @@ public class GenreService : IGenreService
             Name = genre.Name,
             CreatedOn = genre.CreatedOn,
             ModifiedOn = genre.ModifiedOn,
-            BooksCount = genre.BookGenres.Count
         };
     }
 
@@ -72,8 +67,7 @@ public class GenreService : IGenreService
             Id = genre.Id,
             Name = genre.Name,
             CreatedOn = genre.CreatedOn,
-            ModifiedOn = genre.ModifiedOn,
-            BooksCount = 0
+            ModifiedOn = genre.ModifiedOn
         };
     }
 
@@ -104,7 +98,6 @@ public class GenreService : IGenreService
             Name = updatedGenre.Name,
             CreatedOn = updatedGenre.CreatedOn,
             ModifiedOn = updatedGenre.ModifiedOn,
-            BooksCount = updatedGenre.BookGenres.Count
         };
     }
 
@@ -134,7 +127,6 @@ public class GenreService : IGenreService
                 Name = g.Name,
                 CreatedOn = g.CreatedOn,
                 ModifiedOn = g.ModifiedOn,
-                BooksCount = g.BookGenres.Count
             })
             .ToListAsync();
     }

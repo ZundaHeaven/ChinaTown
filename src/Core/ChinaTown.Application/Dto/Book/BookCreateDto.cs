@@ -14,5 +14,5 @@ public class BookCreateDto
     public int PageAmount { get; set; }
     [Required]
     public int YearOfPublish { get; set; }
-    public List<Guid> GenreIds { get; set; } = new();
+    public IEnumerable<Guid> GenreIds { get; set; }
 }

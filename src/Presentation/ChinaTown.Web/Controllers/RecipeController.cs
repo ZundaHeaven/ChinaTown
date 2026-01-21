@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ChinaTown.Application.Dto.Recipe;
 using ChinaTown.Application.Services;
+using ChinaTown.Domain.Enums;
 using ChinaTown.Domain.Exceptions;
+using ChinaTown.Web.Extensions;
 
 namespace ChinaTown.Web.Controllers;
 
@@ -35,7 +37,7 @@ public class RecipeController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateRecipe([FromBody] RecipeCreateDto dto)
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         var recipe = await _recipeService.CreateRecipeAsync(dto, userId);
         return CreatedAtAction(nameof(GetRecipe), new { id = recipe.Id }, recipe);
     }
@@ -44,7 +46,7 @@ public class RecipeController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRecipe(Guid id, [FromBody] RecipeUpdateDto dto)
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         var recipe = await _recipeService.UpdateRecipeAsync(id, dto, userId);
         return Ok(recipe);
     }
@@ -53,7 +55,7 @@ public class RecipeController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRecipe(Guid id)
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         await _recipeService.DeleteRecipeAsync(id, userId);
         return NoContent();
     }
@@ -86,77 +88,32 @@ public class RecipeController : ControllerBase
     [HttpGet("my")]
     public async Task<IActionResult> GetMyRecipes()
     {
-        var userId = GetCurrentUserId();
+        var userId = ControllerHelper.GetUserIdFromPrincipals(User);
         var result = await _recipeService.GetMyRecipesAsync(userId);
         return Ok(result);
     }
+    
 
+    [HttpPatch("{id:guid}/status")]
     [Authorize]
-    [HttpGet("archive")]
-    public async Task<IActionResult> GetArchivedRecipes()
+    public async Task<ActionResult> ChangeStatus(Guid id, [FromBody] string status)
     {
-        var userId = GetCurrentUserId();
-        var result = await _recipeService.GetArchivedRecipesAsync(userId);
-        return Ok(result);
-    }
+        var currentUserId = ControllerHelper.GetUserIdFromPrincipals(User);
 
-    [Authorize]
-    [HttpPost("{id}/publish")]
-    public async Task<IActionResult> PublishRecipe(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _recipeService.PublishRecipeAsync(id, userId);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpPost("{id}/unpublish")]
-    public async Task<IActionResult> UnpublishRecipe(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _recipeService.UnpublishRecipeAsync(id, userId);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpPost("{id}/archive")]
-    public async Task<IActionResult> ArchiveRecipe(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _recipeService.ArchiveRecipeAsync(id, userId);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpPost("{id}/restore")]
-    public async Task<IActionResult> RestoreRecipe(Guid id)
-    {
-        var userId = GetCurrentUserId();
-        await _recipeService.RestoreRecipeAsync(id, userId);
-        return NoContent();
-    }
-
-    [HttpGet("difficulties")]
-    public IActionResult GetDifficulties()
-    {
-        var difficulties = Enum.GetValues(typeof(ChinaTown.Domain.Enums.RecipeDifficulty))
-            .Cast<ChinaTown.Domain.Enums.RecipeDifficulty>()
-            .Select(d => new 
-            { 
-                Id = (int)d, 
-                Name = d.ToString() 
-            })
-            .ToList();
-
-        return Ok(difficulties);
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        var userId = User.FindFirst("userId")?.Value;
-        if (string.IsNullOrEmpty(userId))
-            throw new UnauthorizedException("User not authenticated");
-        return Guid.Parse(userId);
+        if (status != nameof(ContentStatus.Archived) &&
+            status != nameof(ContentStatus.Draft) &&
+            status != nameof(ContentStatus.Published))
+        {
+            return BadRequest(new {message = "Invalid status"});
+        }
+        
+        var contentStatus = status == nameof(ContentStatus.Archived) ? ContentStatus.Archived 
+            : status == nameof(ContentStatus.Draft) ? ContentStatus.Draft 
+            : ContentStatus.Archived;
+        
+        await _recipeService.ChangeStatusAsync(id, currentUserId, contentStatus);
+        
+        return Ok(new { message = "Recipe status changed successfully" });
     }
 
     private string GetContentTypeFromFileName(string fileName)
