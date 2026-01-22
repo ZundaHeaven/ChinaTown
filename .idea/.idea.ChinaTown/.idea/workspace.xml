@@ -12,36 +12,10 @@
   <component name="ChangeListManager">
     <list default="true" id="db20d197-36e9-4df7-9278-d7c76eb6402c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ChinaTown/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChinaTown/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChinaTown.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/ChinaTown.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookCreateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookCreateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookUpdateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Book/BookUpdateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/LikeDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Common/LikeDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Genre/GenreDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Genre/GenreDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeUpdateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/Recipe/RecipeUpdateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/BookMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/BookMapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/CommonMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/CommonMapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/ArticleService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/BookService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/BookService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/GenreService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/GenreService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IArticleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IArticleService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IBookService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IBookService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IRecipeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/IRecipeService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/LikeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/LikeService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/RecipeType/RecipeTypeDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Dto/RecipeType/RecipeTypeDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/RecipeTypeMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Mappers/RecipeTypeMapper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RecipeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RecipeService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RegionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ChinaTown.Application/Services/RegionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/ArticlesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/ArticlesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/BookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/BookController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RecipeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RecipeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RecipeTypeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RecipeTypeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RegionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/RegionController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Controllers/UsersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Extensions/ServiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/Extensions/ServiceExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/ChinaTown.Web/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -293,7 +267,7 @@
       <workItem from="1768903756204" duration="2255000" />
       <workItem from="1768911251132" duration="759000" />
       <workItem from="1768977977371" duration="2002000" />
-      <workItem from="1768985813453" duration="9949000" />
+      <workItem from="1768985813453" duration="12824000" />
     </task>
     <servers />
   </component>

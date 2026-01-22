@@ -8,9 +8,7 @@ public class RecipeTypeMapper : Profile
 {
     public RecipeTypeMapper()
     {
-        CreateMap<RecipeType, RecipeTypeDto>()
-            .ForMember(dest => dest.RecipeCount, 
-                opt => opt.MapFrom(src => src.RecipeTypeClaims.Count));
+        CreateMap<RecipeType, RecipeTypeDto>();
         
         CreateMap<RecipeTypeCreateDto, RecipeType>();
         CreateMap<RecipeTypeUpdateDto, RecipeType>();

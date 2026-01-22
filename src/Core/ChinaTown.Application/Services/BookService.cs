@@ -132,11 +132,13 @@ public class BookService : IBookService
             .Include(b => b.Likes)
             .Include(b => b.Comments)
             .FirstOrDefaultAsync(b => b.Id == id);
+        
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
         if (book == null)
             throw new NotFoundException("Book not found");
 
-        if (book.UserId != userId)
+        if (book.UserId != userId && user?.Role != Role.Admin)
             throw new UnauthorizedException("You can only update your own books");
         
         var slug = SlugHelper.GenerateSlug("Book", dto.Title);

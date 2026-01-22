@@ -1,4 +1,5 @@
-// RecipeDto.cs
+using ChinaTown.Application.Dto.RecipeType;
+using ChinaTown.Application.Dto.Region;
 using ChinaTown.Domain.Enums;
 
 namespace ChinaTown.Application.Dto.Recipe;
@@ -23,16 +24,4 @@ public class RecipeDto
     public string Username { get; set; } = string.Empty;
     public int LikesCount { get; set; }
     public int CommentsCount { get; set; }
-}
-
-public class RecipeTypeDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-}
-
-public class RegionDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
 }

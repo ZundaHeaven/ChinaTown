@@ -144,13 +144,16 @@ public class RecipeService : IRecipeService
         var recipe = await _context.Recipes
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
             .Include(r => r.Comments)
-            .Include(r => r.Likes).Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
+            .Include(r => r.Likes)
+            .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
             .FirstOrDefaultAsync(r => r.Id == id);
 
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        
         if (recipe == null)
             throw new NotFoundException("Recipe not found");
 
-        if (recipe.UserId != userId)
+        if (recipe.UserId != userId&& user?.Role != Role.Admin)
             throw new UnauthorizedException("You can only update your own recipes");
 
         var slug = SlugHelper.GenerateSlug("Recipe", dto.Title);
@@ -247,7 +250,8 @@ public class RecipeService : IRecipeService
             .Include(r => r.RecipeTypeClaims).ThenInclude(rtc => rtc.RecipeType)
             .Include(r => r.RecipeRegions).ThenInclude(rr => rr.Region)
             .Include(r => r.Comments)
-            .Include(r => r.Likes).Include(r => r.Author)
+            .Include(r => r.Likes)
+            .Include(r => r.Author)
             .Where(r => r.UserId == userId);
 
         var recipes = await query
